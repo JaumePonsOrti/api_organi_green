@@ -4,26 +4,54 @@ import {
 import {repository} from '@loopback/repository';
 import {HttpErrors, Request} from '@loopback/rest';
 import {App} from './models/app.model';
-import {AppRepository, RolRepository} from './repositories';
+import {AppRepository, PermisosDeRolAppRepository, PermisosRolRepository} from './repositories';
 
 export class APPAuthenticationStrategy implements AuthenticationStrategy {
   name = 'App';
 
   constructor(
-    @repository(RolRepository) protected userRepository: AppRepository,
+    @repository(AppRepository) protected appRepository: AppRepository,
+    @repository(PermisosDeRolAppRepository) public rolAppRepository: PermisosDeRolAppRepository,
+    @repository(PermisosRolRepository) public permisosRolRepository: PermisosRolRepository
   ) { }
 
   async authenticate(request: Request): Promise<App | undefined | any> {
     const app_token = this.extractAPPKey(request);
-
-    const foundAPP = await this.userRepository.findOne({
-      where: {app_token},
+    console.log("app_token:", app_token);
+    const foundAPP = await this.appRepository.findOne({
+      where: {app_token: app_token},
     });
 
-    if (!foundAPP) {
-      throw new HttpErrors.Unauthorized(`Invalid token`);
+    console.log("foundAPP:", foundAPP);
+
+    const foundRolApp = await this.rolAppRepository.find({
+      where: {
+        permisos_de_rol_app_app_id: foundAPP?.app_id
+      }
+    });
+    console.log("foundAPPRol:", foundRolApp);
+    var foundPermisosApp = [];
+    for (let index = 0; index < foundRolApp.length; index++) {
+      foundPermisosApp.push(await this.permisosRolRepository.find({
+        where: {
+          permisos_rol_rol_id: foundRolApp[index].permisos_de_rol_app_rol_id
+        },
+        include: [
+          {
+            relation: 'permisos_rol_permisos_id'
+          }
+        ]
+      }));
+
     }
-    if (!this.comprobar_cad_fecha(foundAPP.app_cad_token)) {
+    console.log("foundPermisosApp:", foundPermisosApp);
+
+    //console.log(foundPermisosApp);
+    if (!foundAPP) {
+      return {error: `Invalid token of app`};
+    }
+    if (foundAPP.app_cad_token && !this.comprobar_cad_fecha(new Date(foundAPP.app_cad_token))) {
+      return {error: `Actualiza la aplicacion`};
       throw new HttpErrors.Unauthorized(`Actualiza la aplicacion`);
     }
 
@@ -40,16 +68,18 @@ export class APPAuthenticationStrategy implements AuthenticationStrategy {
   }
 
   extractAPPKey(request: Request): string {
-    if (!request.headers.appKey) {
+    //console.log("headers: ", request.headers);
+    // console.log("appKey: ", request.headers.appkey);
+    if (!request.headers["appkey"]) {
       throw new HttpErrors.Unauthorized(`Authorization header not found.`);
+      //throw new HttpErrors.Unauthorized(`Que no funca animal`);
     }
 
+    const authHeaderValue = request.headers['appkey'].toString();
 
-    const authHeaderValue = request.headers.appKey ?? [""];
 
-
-    const token = authHeaderValue[0];
-
+    const token = authHeaderValue;
+    console.log("Token en extract APP Key: ", token);
     return token;
   }
 }

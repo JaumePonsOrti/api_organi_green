@@ -1,16 +1,16 @@
 import {inject} from '@loopback/core';
 import {DefaultCrudRepository} from '@loopback/repository';
 import {DbDataSource} from '../datasources';
-import {PermisosDeRolApp, PermisosDeRolAppRelations} from '../models';
+import {Permisos_De_Rol_App, Permisos_De_Rol_App_Relations} from '../models';
 
 export class PermisosDeRolAppRepository extends DefaultCrudRepository<
-  PermisosDeRolApp,
-  typeof PermisosDeRolApp.prototype.permisos_de_rol_app_id,
-  PermisosDeRolAppRelations
+  Permisos_De_Rol_App,
+  typeof Permisos_De_Rol_App.prototype.permisos_de_rol_app_id,
+  Permisos_De_Rol_App_Relations
 > {
   constructor(
     @inject('datasources.db') dataSource: DbDataSource,
   ) {
-    super(PermisosDeRolApp, dataSource);
+    super(Permisos_De_Rol_App, dataSource);
   }
 }

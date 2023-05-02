@@ -1,7 +1,7 @@
 import {Entity, model, property} from '@loopback/repository';
 
 @model({settings: {strict: false}})
-export class PermisosDeRolApp extends Entity {
+export class Permisos_De_Rol_App extends Entity {
   @property({
     type: 'number',
     id: true,
@@ -26,13 +26,13 @@ export class PermisosDeRolApp extends Entity {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [prop: string]: any;
 
-  constructor(data?: Partial<PermisosDeRolApp>) {
+  constructor(data?: Partial<Permisos_De_Rol_App>) {
     super(data);
   }
 }
 
-export interface PermisosDeRolAppRelations {
+export interface Permisos_De_Rol_App_Relations {
   // describe navigational properties here
 }
 
-export type PermisosDeRolAppWithRelations = PermisosDeRolApp & PermisosDeRolAppRelations;
+export type PermisosDeRolAppWithRelations = Permisos_De_Rol_App & Permisos_De_Rol_App_Relations;

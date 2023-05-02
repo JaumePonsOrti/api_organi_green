@@ -7,43 +7,43 @@ import {
   Where,
 } from '@loopback/repository';
 import {
-  post,
-  param,
+  del,
   get,
   getModelSchemaRef,
+  param,
   patch,
+  post,
   put,
-  del,
   requestBody,
   response,
 } from '@loopback/rest';
-import {PermisosDeRolApp} from '../models';
+import {Permisos_De_Rol_App} from '../models';
 import {PermisosDeRolAppRepository} from '../repositories';
 
 export class PermisosAppController {
   constructor(
     @repository(PermisosDeRolAppRepository)
-    public permisosDeRolAppRepository : PermisosDeRolAppRepository,
-  ) {}
+    public permisosDeRolAppRepository: PermisosDeRolAppRepository,
+  ) { }
 
   @post('/permisos_app')
   @response(200, {
     description: 'PermisosDeRolApp model instance',
-    content: {'application/json': {schema: getModelSchemaRef(PermisosDeRolApp)}},
+    content: {'application/json': {schema: getModelSchemaRef(Permisos_De_Rol_App)}},
   })
   async create(
     @requestBody({
       content: {
         'application/json': {
-          schema: getModelSchemaRef(PermisosDeRolApp, {
+          schema: getModelSchemaRef(Permisos_De_Rol_App, {
             title: 'NewPermisosDeRolApp',
             exclude: ['permisos_de_rol_app_id'],
           }),
         },
       },
     })
-    permisosDeRolApp: Omit<PermisosDeRolApp, 'permisos_de_rol_app_id'>,
-  ): Promise<PermisosDeRolApp> {
+    permisosDeRolApp: Omit<Permisos_De_Rol_App, 'permisos_de_rol_app_id'>,
+  ): Promise<Permisos_De_Rol_App> {
     return this.permisosDeRolAppRepository.create(permisosDeRolApp);
   }
 
@@ -53,7 +53,7 @@ export class PermisosAppController {
     content: {'application/json': {schema: CountSchema}},
   })
   async count(
-    @param.where(PermisosDeRolApp) where?: Where<PermisosDeRolApp>,
+    @param.where(Permisos_De_Rol_App) where?: Where<Permisos_De_Rol_App>,
   ): Promise<Count> {
     return this.permisosDeRolAppRepository.count(where);
   }
@@ -65,14 +65,14 @@ export class PermisosAppController {
       'application/json': {
         schema: {
           type: 'array',
-          items: getModelSchemaRef(PermisosDeRolApp, {includeRelations: true}),
+          items: getModelSchemaRef(Permisos_De_Rol_App, {includeRelations: true}),
         },
       },
     },
   })
   async find(
-    @param.filter(PermisosDeRolApp) filter?: Filter<PermisosDeRolApp>,
-  ): Promise<PermisosDeRolApp[]> {
+    @param.filter(Permisos_De_Rol_App) filter?: Filter<Permisos_De_Rol_App>,
+  ): Promise<Permisos_De_Rol_App[]> {
     return this.permisosDeRolAppRepository.find(filter);
   }
 
@@ -85,12 +85,12 @@ export class PermisosAppController {
     @requestBody({
       content: {
         'application/json': {
-          schema: getModelSchemaRef(PermisosDeRolApp, {partial: true}),
+          schema: getModelSchemaRef(Permisos_De_Rol_App, {partial: true}),
         },
       },
     })
-    permisosDeRolApp: PermisosDeRolApp,
-    @param.where(PermisosDeRolApp) where?: Where<PermisosDeRolApp>,
+    permisosDeRolApp: Permisos_De_Rol_App,
+    @param.where(Permisos_De_Rol_App) where?: Where<Permisos_De_Rol_App>,
   ): Promise<Count> {
     return this.permisosDeRolAppRepository.updateAll(permisosDeRolApp, where);
   }
@@ -100,14 +100,14 @@ export class PermisosAppController {
     description: 'PermisosDeRolApp model instance',
     content: {
       'application/json': {
-        schema: getModelSchemaRef(PermisosDeRolApp, {includeRelations: true}),
+        schema: getModelSchemaRef(Permisos_De_Rol_App, {includeRelations: true}),
       },
     },
   })
   async findById(
     @param.path.number('id') id: number,
-    @param.filter(PermisosDeRolApp, {exclude: 'where'}) filter?: FilterExcludingWhere<PermisosDeRolApp>
-  ): Promise<PermisosDeRolApp> {
+    @param.filter(Permisos_De_Rol_App, {exclude: 'where'}) filter?: FilterExcludingWhere<Permisos_De_Rol_App>
+  ): Promise<Permisos_De_Rol_App> {
     return this.permisosDeRolAppRepository.findById(id, filter);
   }
 
@@ -120,11 +120,11 @@ export class PermisosAppController {
     @requestBody({
       content: {
         'application/json': {
-          schema: getModelSchemaRef(PermisosDeRolApp, {partial: true}),
+          schema: getModelSchemaRef(Permisos_De_Rol_App, {partial: true}),
         },
       },
     })
-    permisosDeRolApp: PermisosDeRolApp,
+    permisosDeRolApp: Permisos_De_Rol_App,
   ): Promise<void> {
     await this.permisosDeRolAppRepository.updateById(id, permisosDeRolApp);
   }
@@ -135,7 +135,7 @@ export class PermisosAppController {
   })
   async replaceById(
     @param.path.number('id') id: number,
-    @requestBody() permisosDeRolApp: PermisosDeRolApp,
+    @requestBody() permisosDeRolApp: Permisos_De_Rol_App,
   ): Promise<void> {
     await this.permisosDeRolAppRepository.replaceById(id, permisosDeRolApp);
   }
