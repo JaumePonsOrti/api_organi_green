@@ -29,17 +29,17 @@ export class Usuario extends Entity {
   @property({
     type: 'date',
   })
-  usuario_cad_token?: string;
+  usuario_cad_token: Date;
 
   @property({
     type: 'number',
   })
-  usuario_intentos_fallido?: number;
+  usuario_intentos_fallidos: number;
 
   @property({
     type: 'date',
   })
-  usuario_fecha_bloqueo?: string;
+  usuario_fecha_bloqueo: Date;
 
   @property({
     type: 'date',

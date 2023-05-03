@@ -13,6 +13,8 @@ import {
 import {verify} from 'argon2';
 
 import {UsuarioRepository} from '../repositories';
+import { Credentials } from '../models/models/Credentials';
+import { IAuthResponse } from '../models/models/IAuthResponse';
 const crypto = require('crypto');
 
 
@@ -57,27 +59,27 @@ export class UsuariosController {
     credentials: Credentials,
   ): Promise<IAuthResponse> {
     const {username, password} = credentials;
-    const usuario = await this.usuariosRepository.findOne({where: {username}});
+    const usuario = await this.usuariosRepository.findOne({where: {usuario_email:username}});
     if (!usuario) {
       throw new HttpErrors.Unauthorized('Credenciales invalidas');
     }
     const numero_fallos_permitidos = [5, 15];
-    const passwordMatched = await verify(usuario.password, password);
+    const passwordMatched = await verify(usuario.usuario_contrasenya, password);
     if (!passwordMatched) {
-      usuario.intentos_fallidos = usuario.intentos_fallidos + 1;
-      if (usuario.intentos_fallidos > numero_fallos_permitidos[0] && usuario.tipo_bloqueo == "ninguno") {
-        usuario.fecha_bloqueo = this.sumar_minutos_fecha_actual(5);
+      usuario.usuario_intentos_fallidos = usuario.usuario_intentos_fallidos + 1;
+      if (usuario.usuario_intentos_fallidos > numero_fallos_permitidos[0] && usuario.usuario_tipo_bloqueo == "ninguno") {
+        usuario.usuario_fecha_bloqueo = this.sumar_minutos_fecha_actual(5);
         //usuario.intentos_fallidos = 0;
-        usuario.tipo_bloqueo = "temporal";
+        usuario.usuario_tipo_bloqueo = "temporal";
       }
-      const fecha_bloqueo = usuario.fecha_bloqueo ? usuario.fecha_bloqueo : new Date();
+      const fecha_bloqueo = usuario.usuario_fecha_bloqueo ? usuario.usuario_fecha_bloqueo : new Date();
 
-      if (this.comprobar_cad_fecha(fecha_bloqueo) == false && usuario.tipo_bloqueo == "temporal") {
-        usuario.intentos_fallidos = 0;
-        usuario.tipo_bloqueo = "ninguno";
+      if (this.comprobar_cad_fecha(fecha_bloqueo) == false && usuario.usuario_tipo_bloqueo == "temporal") {
+        usuario.usuario_intentos_fallidos = 0;
+        usuario.usuario_tipo_bloqueo = "ninguno";
       }
       await this.usuariosRepository.updateById(usuario.id, usuario);
-      if (usuario.intentos_fallidos > numero_fallos_permitidos[0] || usuario.tipo_bloqueo == "temporal") {
+      if (usuario.usuario_intentos_fallidos > numero_fallos_permitidos[0] || usuario.tipo_bloqueo == "temporal") {
         return {
           message: "El usuario esta bloqueado temporalmente, prueva más tarde"
         }
@@ -88,26 +90,26 @@ export class UsuariosController {
     const randomBytes = crypto.randomBytes(128).toString('hex');
     const token = sha256(randomBytes);
     let response: IAuthResponse = {};
-    switch (usuario.tipo_bloqueo) {
+    switch (usuario.usuario_tipo_bloqueo) {
       case "ninguno":
-        usuario.intentos_fallidos = 0;
-        usuario.tipo_bloqueo = "ninguno";
+        usuario.usuario_intentos_fallidos = 0;
+        usuario.usuario_tipo_bloqueo = "ninguno";
 
-        usuario.token = token;
-        usuario.fecha_bloqueo = fecha_reiniciar;
-        usuario.cad_token = this.sumar_dias_fecha_actual(1);
+        usuario.usuario_token = token;
+        usuario.usuario_fecha_bloqueo = fecha_reiniciar;
+        usuario.usuario_cad_token = this.sumar_dias_fecha_actual(1);
         response = {
           access_token: token
         };
         break;
       case "temporal":
-        const fecha_bloqueo = usuario.fecha_bloqueo ? usuario.fecha_bloqueo : new Date();
+        const fecha_bloqueo = usuario.usuario_fecha_bloqueo ? usuario.usuario_fecha_bloqueo : new Date();
         if (this.comprobar_cad_fecha(fecha_bloqueo) == false) {
-          usuario.intentos_fallidos = 0;
-          usuario.tipo_bloqueo = "ninguno";
+          usuario.usuario_intentos_fallidos = 0;
+          usuario.usuario_tipo_bloqueo = "ninguno";
 
-          usuario.fecha_bloqueo = fecha_reiniciar;
-          usuario.cad_token = this.sumar_dias_fecha_actual(1);
+          usuario.usuario_fecha_bloqueo = fecha_reiniciar;
+          usuario.usuario_cad_token = this.sumar_dias_fecha_actual(1);
           response = {
             access_token: token
           };
