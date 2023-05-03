@@ -9,6 +9,7 @@ import {
 } from '@loopback/core';
 import {HttpErrors, Request, RestBindings} from '@loopback/rest';
 import {APPAuthenticationStrategy} from '../app-strategy';
+import {RequestHelper} from '../helpers/request.helper';
 
 /**
  * This class will be bound to the application as an `Interceptor` during
@@ -45,13 +46,19 @@ export class AppPermisosInterceptorInterceptor implements Provider<Interceptor> 
   ) {
     try {
       var appVerifyResult = await this.appStrategy.authenticate(this.request);
-      //console.log(appVerifyResult);
+
+      console.log("AppVerify:", appVerifyResult);
       if (appVerifyResult.error) {
         throw new HttpErrors.Unauthorized(appVerifyResult.error);
       }
+
+      var isPermited = RequestHelper.valiadateRequestIfIsPermited(this.request, appVerifyResult);
+      if (isPermited == false) {
+        throw new HttpErrors.Unauthorized("Upps unautorized");
+      }
       // Add pre-invocation logic here
       const result = await next();
-      console.log(result);
+      //console.log(result);
       // Add post-invocation logic here
       return result;
     } catch (err) {

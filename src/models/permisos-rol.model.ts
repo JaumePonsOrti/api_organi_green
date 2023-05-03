@@ -1,5 +1,4 @@
-import {Entity, belongsTo, model, property} from '@loopback/repository';
-import {Permisos} from './permisos.model';
+import {Entity, model, property} from '@loopback/repository';
 
 @model()
 export class Permisos_Rol extends Entity {
@@ -16,7 +15,10 @@ export class Permisos_Rol extends Entity {
   })
   permisos_rol_rol_id: number;
 
-  @belongsTo(() => Permisos, {keyFrom: "permisos_id"}, {name: "permisos_id"})
+  @property({
+    type: 'number',
+
+  })
   permisos_rol_permisos_id: number;
 
   @property({
@@ -32,8 +34,5 @@ export class Permisos_Rol extends Entity {
 }
 
 export interface PermisosRolRelations {
-  // describe navigational properties here
-
 }
-
 export type PermisosRolWithRelations = Permisos_Rol & PermisosRolRelations;

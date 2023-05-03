@@ -4,7 +4,7 @@ import {
 import {repository} from '@loopback/repository';
 import {HttpErrors, Request} from '@loopback/rest';
 import {App} from './models/app.model';
-import {AppRepository, PermisosDeRolAppRepository, PermisosRolRepository} from './repositories';
+import {AppRepository, PermisosDeRolAppRepository, PermisosRepository, PermisosRolRepository} from './repositories';
 
 export class APPAuthenticationStrategy implements AuthenticationStrategy {
   name = 'App';
@@ -12,7 +12,8 @@ export class APPAuthenticationStrategy implements AuthenticationStrategy {
   constructor(
     @repository(AppRepository) protected appRepository: AppRepository,
     @repository(PermisosDeRolAppRepository) public rolAppRepository: PermisosDeRolAppRepository,
-    @repository(PermisosRolRepository) public permisosRolRepository: PermisosRolRepository
+    @repository(PermisosRolRepository) public permisosRolRepository: PermisosRolRepository,
+    @repository(PermisosRepository) public permisosRepository: PermisosRepository
   ) { }
 
   async authenticate(request: Request): Promise<App | undefined | any> {
@@ -32,19 +33,31 @@ export class APPAuthenticationStrategy implements AuthenticationStrategy {
     console.log("foundAPPRol:", foundRolApp);
     var foundPermisosApp = [];
     for (let index = 0; index < foundRolApp.length; index++) {
-      foundPermisosApp.push(await this.permisosRolRepository.find({
+      var permisos = await this.permisosRolRepository.find({
         where: {
           permisos_rol_rol_id: foundRolApp[index].permisos_de_rol_app_rol_id
         },
-        include: [
-          {
-            relation: 'permisos_rol_permisos_id'
-          }
-        ]
-      }));
+      });
+      var permisosA = {};
+      for (let index = 0; index < permisos.length; index++) {
+        let element = permisos[index];
+        const permiso = await this.permisosRepository.findOne({
+          where: {
+            permisos_id: permisos[index].permisos_rol_permisos_id
+          },
+        });
+        permisosA = {
+          permisos_rol_id: element.permisos_rol_id,
+          permisos_rol_rol_id: element.permisos_rol_rol_id,
+          permisos_rol_permisos_id: permiso,
+          permisos_rol_permitido: element.permisos_rol_permitido
+        };
+
+      }
+      foundPermisosApp.push(permisosA);
 
     }
-    console.log("foundPermisosApp:", foundPermisosApp);
+    //console.log("foundPermisosApp:", foundPermisosApp);
 
     //console.log(foundPermisosApp);
     if (!foundAPP) {
@@ -56,7 +69,7 @@ export class APPAuthenticationStrategy implements AuthenticationStrategy {
     }
 
 
-    return foundAPP;
+    return foundPermisosApp;
     //return {id: foundUser.id?.toString(), name: foundUser.username};
 
   }
@@ -77,9 +90,8 @@ export class APPAuthenticationStrategy implements AuthenticationStrategy {
 
     const authHeaderValue = request.headers['appkey'].toString();
 
-
     const token = authHeaderValue;
-    console.log("Token en extract APP Key: ", token);
+    //console.log("Token en extract APP Key: ", token);
     return token;
   }
 }
