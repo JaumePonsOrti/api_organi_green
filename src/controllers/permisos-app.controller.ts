@@ -58,7 +58,7 @@ export class PermisosAppController {
     return this.permisosDeRolAppRepository.count(where);
   }
 
-  @get('/permisos_app')
+  @get('/permisos_app/optener_todos')
   @response(200, {
     description: 'Array of PermisosDeRolApp model instances',
     content: {
