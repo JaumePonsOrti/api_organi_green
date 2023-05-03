@@ -52,9 +52,9 @@ export class APPAuthenticationStrategy implements AuthenticationStrategy {
           permisos_rol_permisos_id: permiso,
           permisos_rol_permitido: element.permisos_rol_permitido
         };
-
+        foundPermisosApp.push(permisosA);
       }
-      foundPermisosApp.push(permisosA);
+
 
     }
     //console.log("foundPermisosApp:", foundPermisosApp);
@@ -65,7 +65,6 @@ export class APPAuthenticationStrategy implements AuthenticationStrategy {
     }
     if (foundAPP.app_cad_token && !this.comprobar_cad_fecha(new Date(foundAPP.app_cad_token))) {
       return {error: `Actualiza la aplicacion`};
-      throw new HttpErrors.Unauthorized(`Actualiza la aplicacion`);
     }
 
 

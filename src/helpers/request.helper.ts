@@ -26,9 +26,10 @@ export class RequestHelper {
         returna = true;
         console.log("request 0:", returna);
       }
-      if (request[1] == permiso.permisos_nombre_funcion || typeof request[1] == "undefined") {
+      if (request[1] == permiso.permisos_nombre_funcion || typeof request[1] == "undefined" && returna === true) {
         returna = true;
         console.log("request 1:", returna);
+        return returna;
       } else {
         returna = false;
         console.log("else request 1:", returna);

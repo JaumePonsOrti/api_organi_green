@@ -1,6 +1,6 @@
 {
   "name": "api_organi_green",
-  "version": "0.0.1",
+  "version": "0.1.2",
   "description": "API Rest para el programa de organizacion de mi padre",
   "keywords": [
     "loopback-application",
