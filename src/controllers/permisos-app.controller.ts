@@ -26,7 +26,7 @@ export class PermisosAppController {
     public permisosDeRolAppRepository: PermisosDeRolAppRepository,
   ) { }
 
-  @post('/permisos_app')
+  @post('/permisos_app/crear')
   @response(200, {
     description: 'PermisosDeRolApp model instance',
     content: {'application/json': {schema: getModelSchemaRef(Permisos_De_Rol_App)}},
@@ -58,7 +58,7 @@ export class PermisosAppController {
     return this.permisosDeRolAppRepository.count(where);
   }
 
-  @get('/permisos_app/optener_todos')
+  @get('/permisos_app/ver_todos')
   @response(200, {
     description: 'Array of PermisosDeRolApp model instances',
     content: {
@@ -76,7 +76,7 @@ export class PermisosAppController {
     return this.permisosDeRolAppRepository.find(filter);
   }
 
-  @patch('/permisos_app')
+  @patch('/permisos_app/actualizar_todos')
   @response(200, {
     description: 'PermisosDeRolApp PATCH success count',
     content: {'application/json': {schema: CountSchema}},
@@ -95,7 +95,7 @@ export class PermisosAppController {
     return this.permisosDeRolAppRepository.updateAll(permisosDeRolApp, where);
   }
 
-  @get('/permisos_app/{id}')
+  @get('/permisos_app/ver/{id}')
   @response(200, {
     description: 'PermisosDeRolApp model instance',
     content: {
@@ -111,7 +111,7 @@ export class PermisosAppController {
     return this.permisosDeRolAppRepository.findById(id, filter);
   }
 
-  @patch('/permisos_app/{id}')
+  @patch('/permisos_app/actualizar/{id}')
   @response(204, {
     description: 'PermisosDeRolApp PATCH success',
   })
@@ -129,7 +129,7 @@ export class PermisosAppController {
     await this.permisosDeRolAppRepository.updateById(id, permisosDeRolApp);
   }
 
-  @put('/permisos_app/{id}')
+  @put('/permisos_app/remplazar/{id}')
   @response(204, {
     description: 'PermisosDeRolApp PUT success',
   })
@@ -140,7 +140,7 @@ export class PermisosAppController {
     await this.permisosDeRolAppRepository.replaceById(id, permisosDeRolApp);
   }
 
-  @del('/permisos_app/{id}')
+  @del('/permisos_app/borrar/{id}')
   @response(204, {
     description: 'PermisosDeRolApp DELETE success',
   })
