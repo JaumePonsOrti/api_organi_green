@@ -1,6 +1,6 @@
 {
   "name": "api_organi_green",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "API Rest para el programa de organizacion de mi padre",
   "keywords": [
     "loopback-application",
@@ -56,6 +56,7 @@
     "@loopback/rest": "^12.0.9",
     "@loopback/rest-explorer": "^5.0.9",
     "@loopback/service-proxy": "^5.0.9",
+    "argon2": "^0.30.3",
     "loopback-connector-mysql": "^5.4.4",
     "tslib": "^2.0.0"
   },
