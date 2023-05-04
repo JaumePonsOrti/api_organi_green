@@ -9,6 +9,7 @@ import {
 } from '@loopback/core';
 import {HttpErrors, Request, RestBindings} from '@loopback/rest';
 import {APPAuthenticationStrategy} from '../app-strategy';
+import {Debug} from '../helpers/debug';
 import {RequestHelper} from '../helpers/request.helper';
 
 /**
@@ -47,7 +48,7 @@ export class AppPermisosInterceptorInterceptor implements Provider<Interceptor> 
     try {
       var appVerifyResult = await this.appStrategy.authenticate(this.request);
 
-      console.log("AppVerify:", appVerifyResult);
+      //console.log("AppVerify:", appVerifyResult);
       if (appVerifyResult.error) {
         throw new HttpErrors.Unauthorized(appVerifyResult.error);
       }
@@ -58,7 +59,7 @@ export class AppPermisosInterceptorInterceptor implements Provider<Interceptor> 
       }
       // Add pre-invocation logic here
       const result = await next();
-      //console.log(result);
+      Debug.log("Result:", result);
       // Add post-invocation logic here
       return result;
     } catch (err) {

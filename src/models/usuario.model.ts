@@ -42,7 +42,7 @@ export class Usuario extends Entity {
   usuario_fecha_bloqueo: Date;
 
   @property({
-    type: 'date',
+    type: 'string',
   })
   usuario_tipo_bloqueo?: string;
 

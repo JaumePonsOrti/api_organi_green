@@ -7,6 +7,7 @@ import {
 } from '@loopback/rest';
 import {verify} from 'argon2';
 
+import {Debug} from '../helpers/debug';
 import {Credentials} from '../models/models/Credentials';
 import {IAuthResponse} from '../models/models/IAuthResponse';
 import {UsuarioRepository} from '../repositories';
@@ -79,11 +80,12 @@ export class UsuarioController {
           message: "El usuario esta bloqueado temporalmente, prueva más tarde"
         }
       }
-
-      throw new HttpErrors.Unauthorized('Credenciales invalidas');
+      let numFallosRestantes = numero_fallos_permitidos[0] - usuario.usuario_intentos_fallidos;
+      throw new HttpErrors.Unauthorized('Credenciales invalidas, si falla ' + numFallosRestantes + " veces más se bloqueara el usuario unos minutos ");
     }
     const randomBytes = crypto.randomBytes(128).toString('hex');
     const token = sha256(randomBytes);
+    Debug.log("Token generado:", token);
     let response: IAuthResponse = {};
     switch (usuario.usuario_tipo_bloqueo) {
       case "ninguno":
@@ -96,7 +98,7 @@ export class UsuarioController {
         response = {
           access_token: token
         };
-        console.log("ninguno:", response);
+        Debug.log("ninguno:", response);
         break;
       case "temporal":
         const fecha_bloqueo = usuario.usuario_fecha_bloqueo ? usuario.usuario_fecha_bloqueo : new Date();
