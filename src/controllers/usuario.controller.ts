@@ -10,7 +10,7 @@ import {verify} from 'argon2';
 import {Debug} from '../helpers/debug';
 import {Credentials} from '../models/models/Credentials';
 import {IAuthResponse} from '../models/models/IAuthResponse';
-import {UsuarioRepository} from '../repositories';
+import {RolRepository, UsuarioRepository} from '../repositories';
 const crypto = require('crypto');
 
 
@@ -27,8 +27,8 @@ export function sha256(text: any) {
 
 export class UsuarioController {
   constructor(
-    @repository(UsuarioRepository)
-    public usuariosRepository: UsuarioRepository,
+    @repository(UsuarioRepository) public usuariosRepository: UsuarioRepository,
+    @repository(RolRepository) public rolRepository: RolRepository,
   ) { }
 
 
@@ -96,7 +96,9 @@ export class UsuarioController {
         usuario.usuario_fecha_bloqueo = fecha_reiniciar;
         usuario.usuario_cad_token = this.sumar_dias_fecha_actual(1);
         response = {
-          access_token: token
+          usuario_email: usuario.usuario_email,
+          usuario_token: token,
+          usuario_rol: await this.rolRepository.findById(usuario.usuario_rol_id)
         };
         Debug.log("ninguno:", response);
         break;
@@ -109,7 +111,9 @@ export class UsuarioController {
           usuario.usuario_fecha_bloqueo = fecha_reiniciar;
           usuario.usuario_cad_token = this.sumar_dias_fecha_actual(1);
           response = {
-            access_token: token
+            usuario_email: usuario.usuario_email,
+            usuario_token: token,
+            usuario_rol: await this.rolRepository.findById(usuario.usuario_rol_id)
           };
         } else {
           response = {

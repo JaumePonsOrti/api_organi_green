@@ -9,6 +9,7 @@ import {
 } from '@loopback/core';
 import {HttpErrors, Request, RestBindings} from '@loopback/rest';
 import {APPAuthenticationStrategy} from '../app-strategy';
+import {BearerAuthenticationStrategy} from '../bearer-strategy';
 import {Debug} from '../helpers/debug';
 import {RequestHelper} from '../helpers/request.helper';
 
@@ -20,8 +21,8 @@ import {RequestHelper} from '../helpers/request.helper';
 export class AppPermisosInterceptorInterceptor implements Provider<Interceptor> {
 
   constructor(
-    //@inject('authentication.strategies.bearer') protected bearerStrategy: BearerAuthenticationStrategy,
     @inject('authentication.strategies.app') protected appStrategy: APPAuthenticationStrategy,
+    @inject('authentication.strategies.bearer') protected bearerStrategy: BearerAuthenticationStrategy,
     @inject(RestBindings.Http.REQUEST) protected request: Request,
   ) { }
 

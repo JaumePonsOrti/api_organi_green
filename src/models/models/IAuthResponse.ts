@@ -1,4 +1,8 @@
+import {Rol} from '../rol.model'
+
 export interface IAuthResponse {
-  access_token?: string,
+  usuario_email?: string,
+  usuario_token?: string,
+  usuario_rol?: Rol,
   message?: string
 }
