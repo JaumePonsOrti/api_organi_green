@@ -11,23 +11,26 @@ export class BearerAuthenticationStrategy implements AuthenticationStrategy {
 
   constructor(
     @repository(UsuarioRepository) protected userRepository: UsuarioRepository,
+
   ) { }
 
   async authenticate(request: Request): Promise<Usuario | undefined | any> {
+
     const token = this.extractCredentials(request) ?? "";
 
     const foundUser = await this.userRepository.findOne({
-      //where: {token},
+      where: {usuario_token: token},
     });
 
+    console.log("USUARIO:", foundUser);
     if (!foundUser) {
       throw new HttpErrors.Unauthorized(`Invalid token`);
     }
-    /*
-    if (!this.comprobar_cad_fecha(foundUser.cad_token)) {
+
+    if (!this.comprobar_cad_fecha(foundUser.usuario_cad_token)) {
       throw new HttpErrors.Unauthorized(`Invalid token`);
     }
-    */
+
 
     return foundUser;
     //return {id: foundUser.id?.toString(), name: foundUser.username};
