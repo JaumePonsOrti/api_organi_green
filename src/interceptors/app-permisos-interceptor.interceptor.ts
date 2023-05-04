@@ -48,7 +48,7 @@ export class AppPermisosInterceptorInterceptor implements Provider<Interceptor> 
   ) {
     try {
       var appVerifyResult = await this.appStrategy.authenticate(this.request);
-
+      var bearerVerifyResult = await this.bearerStrategy.authenticate(this.request);
       //console.log("AppVerify:", appVerifyResult);
       if (appVerifyResult.error) {
         throw new HttpErrors.Unauthorized(appVerifyResult.error);

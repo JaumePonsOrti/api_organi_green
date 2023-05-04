@@ -38,4 +38,6 @@ export class RequestHelper {
     }
     return returna;
   }
+  public static valiadateRequestIfIsPermitedSearchingByRequest(req: Request, rol: any) {
+  }
 }
