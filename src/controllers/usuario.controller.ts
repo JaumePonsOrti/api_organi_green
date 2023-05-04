@@ -1,20 +1,15 @@
 // Uncomment these imports to begin using these cool features!
 
 // import {inject} from '@loopback/core';
-
-
-export class UsuarioController {
-  constructor() {}
-}
 import {repository} from '@loopback/repository';
 import {
   HttpErrors, post, requestBody
 } from '@loopback/rest';
 import {verify} from 'argon2';
 
+import {Credentials} from '../models/models/Credentials';
+import {IAuthResponse} from '../models/models/IAuthResponse';
 import {UsuarioRepository} from '../repositories';
-import { Credentials } from '../models/models/Credentials';
-import { IAuthResponse } from '../models/models/IAuthResponse';
 const crypto = require('crypto');
 
 
@@ -29,14 +24,14 @@ export function sha256(text: any) {
   return sha256.digest('hex');
 }
 
-export class UsuariosController {
+export class UsuarioController {
   constructor(
     @repository(UsuarioRepository)
     public usuariosRepository: UsuarioRepository,
   ) { }
 
 
-  @post('/usuarios/login')
+  @post('/usuario/login')
   async login(
     @requestBody({
       content: {
@@ -59,7 +54,7 @@ export class UsuariosController {
     credentials: Credentials,
   ): Promise<IAuthResponse> {
     const {username, password} = credentials;
-    const usuario = await this.usuariosRepository.findOne({where: {usuario_email:username}});
+    const usuario = await this.usuariosRepository.findOne({where: {usuario_email: username}});
     if (!usuario) {
       throw new HttpErrors.Unauthorized('Credenciales invalidas');
     }
@@ -78,8 +73,8 @@ export class UsuariosController {
         usuario.usuario_intentos_fallidos = 0;
         usuario.usuario_tipo_bloqueo = "ninguno";
       }
-      await this.usuariosRepository.updateById(usuario.id, usuario);
-      if (usuario.usuario_intentos_fallidos > numero_fallos_permitidos[0] || usuario.tipo_bloqueo == "temporal") {
+      await this.usuariosRepository.updateById(usuario.usuario_id, usuario);
+      if (usuario.usuario_intentos_fallidos > numero_fallos_permitidos[0] || usuario.usuario_tipo_bloqueo == "temporal") {
         return {
           message: "El usuario esta bloqueado temporalmente, prueva más tarde"
         }
@@ -101,6 +96,7 @@ export class UsuariosController {
         response = {
           access_token: token
         };
+        console.log("ninguno:", response);
         break;
       case "temporal":
         const fecha_bloqueo = usuario.usuario_fecha_bloqueo ? usuario.usuario_fecha_bloqueo : new Date();
@@ -123,7 +119,7 @@ export class UsuariosController {
       default:
         break;
     }
-    await this.usuariosRepository.updateById(usuario.id, usuario);
+    await this.usuariosRepository.updateById(usuario.usuario_id, usuario);
     return response;
   }
 

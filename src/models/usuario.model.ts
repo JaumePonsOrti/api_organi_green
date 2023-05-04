@@ -64,7 +64,7 @@ export class Usuario extends Entity {
   @property({
     type: 'number',
   })
-  usuario_rol?: number;
+  usuario_rol_id?: number;
 
 
   constructor(data?: Partial<Usuario>) {
