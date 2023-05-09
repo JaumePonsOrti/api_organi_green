@@ -3,6 +3,7 @@ import {
 } from '@loopback/authentication';
 import {repository} from '@loopback/repository';
 import {HttpErrors, Request} from '@loopback/rest';
+import {RequestHelper} from './helpers/request.helper';
 import {Usuario} from './models';
 import {UsuarioRepository} from './repositories';
 
@@ -14,7 +15,24 @@ export class BearerAuthenticationStrategy implements AuthenticationStrategy {
 
   ) { }
 
+  public accesoPermitidoSinToken(request: Request) {
+    //Primero se comprueba si es el metodo login o no
+    const partes = RequestHelper.getRequestPorPartes(request);
+    const accesoSinTokenPermitido =
+      partes[0] == "usuario" && partes[1] && partes[1] == "login"
+      ;//|| partes[0] == "usuario" && partes[1] && partes[1] == "recuperar_password";
+
+    console.log("Acceso Sin Token Permitido:", accesoSinTokenPermitido);
+
+    return accesoSinTokenPermitido;
+
+  }
+
   async authenticate(request: Request): Promise<Usuario | undefined | any> {
+    //Primero se comprueba si es el metodo login o no
+    if (this.accesoPermitidoSinToken(request)) {
+      return true;
+    }
 
     const token = this.extractCredentials(request) ?? "";
 
@@ -23,6 +41,7 @@ export class BearerAuthenticationStrategy implements AuthenticationStrategy {
     });
 
     console.log("USUARIO:", foundUser);
+
     if (!foundUser) {
       throw new HttpErrors.Unauthorized(`Invalid token`);
     }
@@ -45,7 +64,7 @@ export class BearerAuthenticationStrategy implements AuthenticationStrategy {
 
   extractCredentials(request: Request): string {
     if (!request.headers.authorization) {
-      throw new HttpErrors.Unauthorized(`Authorization header not found.`);
+      throw new HttpErrors.Unauthorized(`Authorization header not found.12`);
     }
 
 
@@ -67,17 +86,4 @@ export class BearerAuthenticationStrategy implements AuthenticationStrategy {
     return token;
   }
 
-  extractAPPKey(request: Request): string {
-    if (!request.headers.authorization) {
-      throw new HttpErrors.Unauthorized(`Authorization header not found.`);
-    }
-
-
-    const authHeaderValue = request.headers.appKey ?? [""];
-
-
-    const token = authHeaderValue[0];
-
-    return token;
-  }
 }

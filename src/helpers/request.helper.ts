@@ -7,7 +7,7 @@ export class RequestHelper {
   }
   public static getRequestPorPartes(request: Request) {
 
-    console.log("request: ", request.url);
+    //console.log("request: ", request.url);
     let req = request.url.split("/");
     req = [req[1], req[2]];
     console.log(req);
