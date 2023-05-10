@@ -8,6 +8,9 @@ export class PermisosRolRepository extends DefaultCrudRepository<
   typeof Permisos_Rol.prototype.permisos_rol_id,
   PermisosRolRelations
 > {
+  static find(arg0: {where: {permisos_rol_rol_id: number | undefined;};}) {
+    throw new Error('Method not implemented.');
+  }
   public readonly permisos: BelongsToAccessor<
     Permisos,
     typeof Permisos_Rol.prototype.permisos_rol_rol_id
