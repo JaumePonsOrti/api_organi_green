@@ -1,8 +1,13 @@
+import {repository} from '@loopback/repository';
 import {Request} from '@loopback/rest';
-import {Permisos} from '../models';
+import {Permisos, Usuario} from '../models';
+import {PermisosRolRepository} from '../repositories';
 
 export class RequestHelper {
-  constructor() {
+  constructor(
+    @repository(PermisosRolRepository) public permisosRolRepository: PermisosRolRepository
+
+  ) {
 
   }
   public static getRequestPorPartes(request: Request) {
@@ -38,6 +43,10 @@ export class RequestHelper {
     }
     return returna;
   }
-  public static valiadateRequestIfIsPermitedSearchingByRequest(req: Request, rol: any) {
+  public async valiadateRequestIfIsPermitedSearchingByRequest(req: Request, foundUser: Usuario) {
+    const permisosRol: any = this.permisosRolRepository.find({
+      where: {permisos_rol_rol_id: foundUser.usuario_rol_id}
+    });
+    return RequestHelper.valiadateRequestIfIsPermited(req, permisosRol);
   }
 }

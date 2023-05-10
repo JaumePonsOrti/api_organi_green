@@ -26,7 +26,7 @@ export class RolController {
     public rolRepository: RolRepository,
   ) { }
 
-  @post('/rol')
+  @post('/rol/crear')
   @response(200, {
     description: 'Rol model instance',
     content: {'application/json': {schema: getModelSchemaRef(Rol)}},
@@ -49,7 +49,7 @@ export class RolController {
 
 
 
-  @get('/rol/getList')
+  @get('/rol/ver/todos')
   @response(200, {
     description: 'Array of Rol model instances',
     content: {
@@ -86,7 +86,7 @@ export class RolController {
     return this.rolRepository.updateAll(rol, where);
   }
 
-  @get('/rol/{id}')
+  @get('/rol/ver/{id}')
   @response(200, {
     description: 'Rol model instance',
     content: {
@@ -102,7 +102,7 @@ export class RolController {
     return this.rolRepository.findById(id, filter);
   }
 
-  @patch('/rol/{id}')
+  @patch('/rol/modificar/{id}')
   @response(204, {
     description: 'Rol PATCH success',
   })
@@ -120,7 +120,7 @@ export class RolController {
     await this.rolRepository.updateById(id, rol);
   }
 
-  @put('/rol/{id}')
+  @put('/rol/remplazar/{id}')
   @response(204, {
     description: 'Rol PUT success',
   })
@@ -131,7 +131,7 @@ export class RolController {
     await this.rolRepository.replaceById(id, rol);
   }
 
-  @del('/rol/{id}')
+  @del('/rol/eliminar/{id}')
   @response(204, {
     description: 'Rol DELETE success',
   })

@@ -5,14 +5,14 @@ import {repository} from '@loopback/repository';
 import {HttpErrors, Request} from '@loopback/rest';
 import {RequestHelper} from './helpers/request.helper';
 import {Usuario} from './models';
-import {UsuarioRepository} from './repositories';
+import {PermisosRolRepository, UsuarioRepository} from './repositories';
 
 export class BearerAuthenticationStrategy implements AuthenticationStrategy {
   name = 'Bearer';
 
   constructor(
     @repository(UsuarioRepository) protected userRepository: UsuarioRepository,
-
+    @repository(PermisosRolRepository) public permisosRolRepository: PermisosRolRepository
   ) { }
 
   public accesoPermitidoSinToken(request: Request) {
@@ -40,6 +40,8 @@ export class BearerAuthenticationStrategy implements AuthenticationStrategy {
       where: {usuario_token: token},
     });
 
+
+
     console.log("USUARIO:", foundUser);
 
     if (!foundUser) {
@@ -48,6 +50,10 @@ export class BearerAuthenticationStrategy implements AuthenticationStrategy {
 
     if (!this.comprobar_cad_fecha(foundUser.usuario_cad_token)) {
       throw new HttpErrors.Unauthorized(`Invalid token`);
+    }
+    var requestHelper = new RequestHelper(this.permisosRolRepository);
+    if (await !requestHelper.valiadateRequestIfIsPermitedSearchingByRequest(request, foundUser)) {
+      throw new HttpErrors.Unauthorized(`Invalid auth`);
     }
 
 
