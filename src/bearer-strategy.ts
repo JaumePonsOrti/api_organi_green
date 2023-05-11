@@ -1,6 +1,7 @@
 import {
   AuthenticationStrategy
 } from '@loopback/authentication';
+import {BindingSelector} from '@loopback/core';
 import {repository} from '@loopback/repository';
 import {HttpErrors, Request} from '@loopback/rest';
 import {RequestHelper} from './helpers/request.helper';
@@ -9,6 +10,7 @@ import {PermisosRolRepository, UsuarioRepository} from './repositories';
 
 export class BearerAuthenticationStrategy implements AuthenticationStrategy {
   name = 'Bearer';
+  static CURRENT_USER: BindingSelector;
 
   constructor(
     @repository(UsuarioRepository) protected userRepository: UsuarioRepository,
