@@ -96,7 +96,7 @@ export class RolController {
     },
   })
   async findById(
-    @param.path.number('id') id: number,
+    @param.path.number('rol_id') id: number,
     @param.filter(Rol, {exclude: 'where'}) filter?: FilterExcludingWhere<Rol>
   ): Promise<Rol> {
     return this.rolRepository.findById(id, filter);

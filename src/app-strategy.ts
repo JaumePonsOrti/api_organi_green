@@ -8,7 +8,7 @@ import {AppRepository, PermisosDeRolAppRepository, PermisosRepository, PermisosR
 
 export class APPAuthenticationStrategy implements AuthenticationStrategy {
   name = 'App';
-
+  public static CURRENT_APP: App;
   constructor(
     @repository(AppRepository) protected appRepository: AppRepository,
     @repository(PermisosDeRolAppRepository) public rolAppRepository: PermisosDeRolAppRepository,
@@ -66,7 +66,7 @@ export class APPAuthenticationStrategy implements AuthenticationStrategy {
     if (foundAPP.app_cad_token && !this.comprobar_cad_fecha(new Date(foundAPP.app_cad_token))) {
       return {error: `Actualiza la aplicacion`};
     }
-
+    APPAuthenticationStrategy.CURRENT_APP = foundAPP;
 
     return foundPermisosApp;
     //return {id: foundUser.id?.toString(), name: foundUser.username};

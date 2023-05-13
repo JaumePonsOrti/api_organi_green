@@ -1,7 +1,6 @@
 import {
   AuthenticationStrategy
 } from '@loopback/authentication';
-import {BindingSelector} from '@loopback/core';
 import {repository} from '@loopback/repository';
 import {HttpErrors, Request} from '@loopback/rest';
 import {RequestHelper} from './helpers/request.helper';
@@ -10,7 +9,7 @@ import {PermisosRolRepository, UsuarioRepository} from './repositories';
 
 export class BearerAuthenticationStrategy implements AuthenticationStrategy {
   name = 'Bearer';
-  static CURRENT_USER: BindingSelector;
+  public static CURRENT_USER: Usuario;
 
   constructor(
     @repository(UsuarioRepository) protected userRepository: UsuarioRepository,
@@ -57,7 +56,7 @@ export class BearerAuthenticationStrategy implements AuthenticationStrategy {
     if (await !requestHelper.valiadateRequestIfIsPermitedSearchingByRequest(request, foundUser)) {
       throw new HttpErrors.Unauthorized(`Invalid auth`);
     }
-
+    BearerAuthenticationStrategy.CURRENT_USER = foundUser;
 
     return foundUser;
     //return {id: foundUser.id?.toString(), name: foundUser.username};

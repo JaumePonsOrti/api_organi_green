@@ -1,4 +1,7 @@
-class Menus_por_rol {
+import {Elementos_menu} from './elementos_menu';
+import {Enlace_Menu} from './enlace_menu';
+
+export class Menus_por_rol {
   private enlaces_menu_disponible: Enlace_Menu[] = Elementos_menu.getLista();
   constructor() {
 
@@ -51,16 +54,18 @@ class Menus_por_rol {
       this.enlaces_menu_disponible[6],
       this.enlaces_menu_disponible[7],
       this.enlaces_menu_disponible[8],
-      this.enlaces_menu_disponible[9],
     ],
+    "Sin_Loguear": [],
     "Trabajador_de_Campo": [
       this.enlaces_menu_disponible[2],
+      this.enlaces_menu_disponible[3],
     ]
   };
 
   public elementoPorRol_id: any = {
     0: this.elementoPorRol_Nombre.Sistema,
     1: this.elementoPorRol_Nombre.Admin,
+    6: this.elementoPorRol_Nombre.Sin_Loguear,
     7: this.elementoPorRol_Nombre.Trabajador_de_Campo
   }
 

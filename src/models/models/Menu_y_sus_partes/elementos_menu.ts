@@ -1,4 +1,6 @@
-class Elementos_menu {
+import {Enlace_Menu} from './enlace_menu';
+
+export class Elementos_menu {
   constructor() {
 
   }

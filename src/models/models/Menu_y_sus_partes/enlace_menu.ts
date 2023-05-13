@@ -1,4 +1,4 @@
-class Enlace_Menu {
+export class Enlace_Menu {
   /**
    *
    */
