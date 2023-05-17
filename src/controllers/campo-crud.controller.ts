@@ -189,7 +189,7 @@ export class CampoCrudController {
       content: {
         'application/json': {
           schema: getModelSchemaRef(Campo, {
-            title: 'NewUsuario',
+            title: 'NewCampo',
             exclude: ['campo_id'],
           }),
         },

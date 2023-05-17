@@ -16,7 +16,7 @@ export class Campo extends Entity {
   campo_nombre: string;
 
   @property({
-    type: 'float',
+    type: 'number',
     required: true
   })
   campo_tamanyo_facturacion: number;
