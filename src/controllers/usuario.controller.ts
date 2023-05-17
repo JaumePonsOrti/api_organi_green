@@ -7,17 +7,20 @@ import {
 } from '@loopback/rest';
 import {verify} from 'argon2';
 
+import {inject} from '@loopback/core';
+import {APPAuthenticationStrategy} from '../app-strategy';
+import {BearerAuthenticationStrategy} from '../bearer-strategy';
 import {Debug} from '../helpers/debug';
 import {Credentials} from '../models/models/Credentials';
 import {IAuthResponse} from '../models/models/IAuthResponse';
 import {RolRepository, UsuarioRepository} from '../repositories';
+import {AccionesRealizadasCrudController} from './acciones-realizadas-crud.controller';
+import {UsuarioCrudController} from './usuario-crud.controller';
 const crypto = require('crypto');
 
 
 const salt = "54zr9SBd4k2qO03Ezp#%qf9BM2Cm9xfPg94%P^&$NHV@qczuXE";
 const fecha_reiniciar = new Date(0);
-
-
 
 export function sha256(text: any) {
   const sha256 = crypto.createHash('sha256');
@@ -25,11 +28,23 @@ export function sha256(text: any) {
   return sha256.digest('hex');
 }
 
-export class UsuarioController {
+export class UsuarioController extends UsuarioCrudController {
   constructor(
     @repository(UsuarioRepository) public usuariosRepository: UsuarioRepository,
     @repository(RolRepository) public rolRepository: RolRepository,
-  ) { }
+    @repository(UsuarioRepository) public usuarioRepository: UsuarioRepository,
+    @inject('authentication.strategies.app')
+    public appAuthenticationStrategy: APPAuthenticationStrategy,
+    @inject('authentication.strategies.bearer')
+    public bearerAuthenticationStrategy: BearerAuthenticationStrategy,
+    @inject('controllers.AccionesRealizadasCrudController') public acciones: AccionesRealizadasCrudController
+  ) {
+    super(appAuthenticationStrategy,
+      bearerAuthenticationStrategy,
+      usuariosRepository,
+      acciones
+    );
+  }
 
 
   @post('/usuario/login')

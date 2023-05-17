@@ -9,80 +9,97 @@ export class Elementos_menu {
     new Enlace_Menu(
       "Planificación",
       "planificar",
-      "planificacion"
+      "planificacion",
+      "fa fa-calendar"
     ),
     new Enlace_Menu(
       "Ver Planificación",
       "planificar",
-      "desplegable"
+      "desplegable",
+      "fas fa-tachometer-alt"
     ),
     new Enlace_Menu(
       "Ver Planificación En Campo",
       "planificar",
-      "desplegable"
+      "desplegable",
+      "fas fa-tachometer-alt"
     ),
     new Enlace_Menu(
       "Resumen planificacion",
+      "desplegable",
       "producto",
-      "desplegable"
+      "fas fa-tachometer-alt"
     ),
     new Enlace_Menu(
       "Clientes",
+      "crud",
       "cliente",
-      "crud"
+      "fas fa-tachometer-alt"
     ), new Enlace_Menu(
       "Usuarios",
+      "crud",
       "usuario",
-      "crud"
+      "fas fa-tachometer-alt"
     ),
     new Enlace_Menu(
       "Productos",
+      "crud",
       "producto",
-      "crud"
+      "fas fa-tachometer-alt"
     ),
     new Enlace_Menu(
       "Campos",
+      "crud",
       "campo",
-      "crud"
+      "fas fa-tachometer-alt"
     ),
     new Enlace_Menu(
       "Parcelas",
+      "crud",
       "parcela",
-      "crud"
+      "fas fa-tachometer-alt"
     ),
     new Enlace_Menu(
       "Versiones App",
       "app",
-      "crud"
+      "crud",
+      "fas fa-tachometer-alt"
     ),
     new Enlace_Menu(
       "Rol APP",
+      "crud",
       "permisos_de_rol_app",
-      "crud"
+      "fas fa-tachometer-alt"
     ),
     new Enlace_Menu(
       "Roles",
+      "crud",
       "rol",
-      "crud"
+
+      "fas fa-tachometer-alt"
     ),
     new Enlace_Menu(
       "Permisos Rol",
+      "crud",
       "permisos_rol",
-      "crud"
+      "fas fa-tachometer-alt"
     ),
     new Enlace_Menu(
       "Permisos",
+      "crud",
       "permisos",
-      "crud"
+      "fas fa-tachometer-alt"
     ),
     new Enlace_Menu(
       "Gestionar Permisos por ROL",
+      "CHECKEABLE",
       "parcela",
-      "CHECKEABLE"
+      "fas fa-tachometer-alt"
     ), new Enlace_Menu(
       "Gestionar Permisos por rol APP ",
+      "CHECKEABLE",
       "parcela",
-      "CHECKEABLE"
+      "fas fa-tachometer-alt"
     ),
   ];
 

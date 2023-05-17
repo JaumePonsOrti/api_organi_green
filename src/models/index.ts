@@ -8,3 +8,12 @@ export * from './permisos.model';
 export * from './rol.model';
 export * from './usuario.model';
 
+export * from './acciones-realizadas.model';
+export * from './asignacion.model';
+export * from './campo.model';
+export * from './cliente.model';
+export * from './parcelas.model';
+export * from './planificacion.model';
+export * from './productos.model';
+export * from './productos-planificados.model';
+export * from './unidades-de-medida.model';

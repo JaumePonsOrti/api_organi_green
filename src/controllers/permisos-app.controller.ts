@@ -58,7 +58,7 @@ export class PermisosAppController {
     return this.permisosDeRolAppRepository.count(where);
   }
 
-  @get('/permisos_app/ver_todos')
+  @get('/permisos_app/ver/todos')
   @response(200, {
     description: 'Array of PermisosDeRolApp model instances',
     content: {
@@ -76,7 +76,7 @@ export class PermisosAppController {
     return this.permisosDeRolAppRepository.find(filter);
   }
 
-  @patch('/permisos_app/actualizar_todos')
+  @patch('/permisos_app/actualizar/todos')
   @response(200, {
     description: 'PermisosDeRolApp PATCH success count',
     content: {'application/json': {schema: CountSchema}},

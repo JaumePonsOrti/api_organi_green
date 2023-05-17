@@ -56,7 +56,7 @@ export class AppPermisosInterceptorInterceptor implements Provider<Interceptor> 
 
       var isPermited = RequestHelper.valiadateRequestIfIsPermited(this.request, appVerifyResult);
       if (isPermited == false) {
-        throw new HttpErrors.Unauthorized("Upps unautorized");
+        throw new HttpErrors.Unauthorized("No tienes permisos para accceder a esto");
       }
       // Add pre-invocation logic here
       const result = await next();

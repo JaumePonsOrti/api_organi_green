@@ -1,4 +1,4 @@
-class Configuracion_View {
+export class Configuracion_View {
   constructor() {
 
   }

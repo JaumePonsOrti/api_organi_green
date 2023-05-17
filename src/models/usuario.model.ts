@@ -33,11 +33,13 @@ export class Usuario extends Entity {
 
   @property({
     type: 'number',
+    default: 0
   })
   usuario_intentos_fallidos: number;
 
   @property({
     type: 'date',
+    default: new Date()
   })
   usuario_fecha_bloqueo: Date;
 
