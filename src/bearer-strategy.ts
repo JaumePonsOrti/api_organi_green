@@ -20,7 +20,8 @@ export class BearerAuthenticationStrategy implements AuthenticationStrategy {
     //Primero se comprueba si es el metodo login o no
     const partes = RequestHelper.getRequestPorPartes(request);
     const accesoSinTokenPermitido =
-      partes[0] == "usuario" && partes[1] && partes[1] == "login"
+      partes[0] == "usuario" && partes[1] && partes[1] == "login" ||
+      partes[0] === "ping"
       ;//|| partes[0] == "usuario" && partes[1] && partes[1] == "recuperar_password";
 
     console.log("Acceso Sin Token Permitido:", accesoSinTokenPermitido);
