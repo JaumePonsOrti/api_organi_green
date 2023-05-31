@@ -28,6 +28,7 @@ export class Usuario extends Entity {
 
   @property({
     type: 'date',
+    default: new Date()
   })
   usuario_cad_token: Date;
 

@@ -20,7 +20,7 @@ const crypto = require('crypto');
 
 
 const salt = "54zr9SBd4k2qO03Ezp#%qf9BM2Cm9xfPg94%P^&$NHV@qczuXE";
-const fecha_reiniciar = new Date(0);
+const fecha_reiniciar = new Date(1);
 
 export function sha256(text: any) {
   const sha256 = crypto.createHash('sha256');
@@ -76,6 +76,8 @@ export class UsuarioController extends UsuarioCrudController {
     }
     const numero_fallos_permitidos = [5, 15];
     const passwordMatched = await verify(usuario.usuario_contrasenya, password);
+
+    //Secompruba que la comprobación de usuario y la contraseña sea true
     if (!passwordMatched) {
       usuario.usuario_intentos_fallidos = usuario.usuario_intentos_fallidos + 1;
       if (usuario.usuario_intentos_fallidos > numero_fallos_permitidos[0] && usuario.usuario_tipo_bloqueo == "ninguno") {
@@ -98,10 +100,13 @@ export class UsuarioController extends UsuarioCrudController {
       let numFallosRestantes = numero_fallos_permitidos[0] - usuario.usuario_intentos_fallidos;
       throw new HttpErrors.Unauthorized('Credenciales invalidas, si falla ' + numFallosRestantes + " veces más se bloqueara el usuario unos minutos ");
     }
+
+
     const randomBytes = crypto.randomBytes(128).toString('hex');
     const token = sha256(randomBytes);
     Debug.log("Token generado:", token);
     let response: IAuthResponse = {};
+    //Antes del switch
     switch (usuario.usuario_tipo_bloqueo) {
       case "ninguno":
         usuario.usuario_intentos_fallidos = 0;
@@ -115,7 +120,7 @@ export class UsuarioController extends UsuarioCrudController {
           usuario_token: token,
           usuario_rol: await this.rolRepository.findById(usuario.usuario_rol_id)
         };
-        Debug.log("ninguno:", response);
+        Debug.log("Al final del switch de usuario/login, en la opcion ninguno, la respuesta es:", response);
         break;
       case "temporal":
         const fecha_bloqueo = usuario.usuario_fecha_bloqueo ? usuario.usuario_fecha_bloqueo : new Date();
@@ -140,7 +145,9 @@ export class UsuarioController extends UsuarioCrudController {
       default:
         break;
     }
+    Debug.log("Al final de usario/login, antes de actualizar la informacion en la base de datos, usuario:", usuario);
     await this.usuariosRepository.updateById(usuario.usuario_id, usuario);
+    Debug.log("Al final de usario/login, antes del return");
     return response;
   }
 
@@ -152,12 +159,10 @@ export class UsuarioController extends UsuarioCrudController {
   }
 
 
-  private sumar_dias_fecha_actual(dias_sumar: number) {
+  private sumar_dias_fecha_actual(dias: number) {
     let fecha = new Date();
-    let f_div = this.dividir_fecha(fecha);//Fecha Dividida
-    f_div.dia = f_div.dia + dias_sumar;
-    let fecha_dev = this.fecha_to_string(f_div);
-    fecha = new Date(fecha_dev);
+    fecha.setDate(fecha.getDate() + dias);
+    return fecha;
     return fecha;
   }
 
@@ -169,6 +174,7 @@ export class UsuarioController extends UsuarioCrudController {
     f_div.minutos = f_div.minutos + minutos;
     let fecha_dev = this.fecha_to_string(f_div);
     fecha = new Date(fecha_dev);
+    Debug.log("Fecha en sumar minutos fecha actual: ", fecha);
     return fecha;
   }
 
