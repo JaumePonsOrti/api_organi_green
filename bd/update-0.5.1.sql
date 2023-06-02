@@ -1,0 +1,1 @@
+INSERT INTO `permisos_rol` (`permisos_rol_id`, `permisos_rol_rol_id`, `permisos_rol_permisos_id`, `permisos_rol_permitido`) VALUES (NULL, '0', '25', '1'), (NULL, '1', '25', '1'), (NULL, '0', '4', '1'), (NULL, '1', '4', '1'), (NULL, '0', '5', '1'), (NULL, '1', '5', '1');

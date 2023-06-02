@@ -248,7 +248,15 @@ export class UsuarioCrudController {
   async find(
     @param.filter(Usuario) filter?: Filter<Usuario>,
   ): Promise<Usuario[]> {
-    let returnable = await this.usuarioRepository.find(filter);
+    let returnable = await this.usuarioRepository.find({
+      fields: [
+        "usuario_id",
+        "usuario_email",
+        "usuario_rol_id",
+        "usuario_intentos_fallidos",
+        "usuario_medida_id"
+      ]
+    });
     await this.acciones.create(new AccionesRealizadas({
       acciones_id_app: APPAuthenticationStrategy.CURRENT_APP.app_id,
       acciones_id_tabla: "TODOS",
