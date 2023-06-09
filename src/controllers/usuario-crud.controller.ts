@@ -18,6 +18,7 @@ import {
   requestBody,
   response,
 } from '@loopback/rest';
+import * as argon2 from "argon2";
 import {APPAuthenticationStrategy} from '../app-strategy';
 import {BearerAuthenticationStrategy} from '../bearer-strategy';
 import {AccionesRealizadas, Usuario} from '../models';
@@ -188,16 +189,75 @@ export class UsuarioCrudController {
     @requestBody({
       content: {
         'application/json': {
+          schema: {
+            type: 'object',
+            required: ['usuario_email', 'usuario_rol_id', 'usuario_contrasenya'],
+            properties: {
+              usuario_email: {
+                type: 'string',
+              },
+              usuario_medida_id: {
+                type: 'string',
+              },
+              usuario_rol_id: {
+                type: 'string',
+              },
+              usuario_contrasenya: {
+                type: 'string',
+              },
+            },
+          },
+        },
+      },
+      /*content: {
+        'application/json': {
           schema: getModelSchemaRef(Usuario, {
             title: 'NewUsuario',
             exclude: ['usuario_id'],
           }),
         },
-      },
+      },*/
     })
-    usuario: Omit<Usuario, 'usuario_id'>,
+    usuario: Omit<
+      {
+        usuario_email: 'string',
+        usuario_medida_id: 'string',
+        usuario_rol_id: 'string',
+        usuario_contrasenya: 'string'
+      },
+      'usuario_id'>,
   ): Promise<Usuario> {
-    let usuario_creado = await this.usuarioRepository.create(usuario);
+    console.log("request: ", usuario);
+    //Se pasan los datos a una nueva variable
+    let newUsuario = new Usuario();
+    console.log("Post newUsuario: ", newUsuario);
+    newUsuario.usuario_rol_id = parseInt(usuario.usuario_rol_id) ?? 6;
+    console.log("Post rol id");
+    newUsuario.usuario_email = usuario.usuario_email;
+    console.log("Post rol email");
+
+    newUsuario.usuario_medida_id = usuario.usuario_medida_id ? parseInt(usuario.usuario_medida_id) : undefined;
+    console.log("Post medida");
+
+    if (usuario.usuario_contrasenya.length < 8) {
+
+    }
+
+    // Se hashea la contraseña para guardarla en la base de datos
+    newUsuario.usuario_contrasenya = await argon2.hash(
+      usuario.usuario_contrasenya,
+      {
+        type: argon2.argon2i,
+        memoryCost: 8192,
+        timeCost: 56,
+        parallelism: 8,
+        hashLength: 64,
+        saltLength: 24,
+      }
+    );
+    console.log("Post contraseña");
+
+    let usuario_creado = await this.usuarioRepository.create(newUsuario);
     Object.keys(usuario_creado).forEach(async element => {
       //Mover acciones create aquí dentro
     });
@@ -253,7 +313,6 @@ export class UsuarioCrudController {
         "usuario_id",
         "usuario_email",
         "usuario_rol_id",
-        "usuario_intentos_fallidos",
         "usuario_medida_id"
       ]
     });
