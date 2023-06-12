@@ -226,21 +226,19 @@ export class UsuarioCrudController {
         usuario_contrasenya: 'string'
       },
       'usuario_id'>,
-  ): Promise<Usuario> {
+  ): Promise<Usuario | {
+    "error": string,
+    "message": string
+  }> {
     console.log("request: ", usuario);
     //Se pasan los datos a una nueva variable
     let newUsuario = new Usuario();
     console.log("Post newUsuario: ", newUsuario);
     newUsuario.usuario_rol_id = parseInt(usuario.usuario_rol_id) ?? 6;
-    console.log("Post rol id");
     newUsuario.usuario_email = usuario.usuario_email;
-    console.log("Post rol email");
-
     newUsuario.usuario_medida_id = usuario.usuario_medida_id ? parseInt(usuario.usuario_medida_id) : undefined;
-    console.log("Post medida");
-
     if (usuario.usuario_contrasenya.length < 8) {
-
+      return {"error": "error_contrasenya_invalid", message: "La contrasea debe tener 8 caracteres."};
     }
 
     // Se hashea la contraseña para guardarla en la base de datos
@@ -388,14 +386,63 @@ export class UsuarioCrudController {
     @requestBody({
       content: {
         'application/json': {
-          schema: getModelSchemaRef(Usuario, {partial: true}),
+          schema: {
+            type: 'object',
+            required: ['usuario_email', 'usuario_rol_id', 'usuario_id'],
+            properties: {
+              usuario_id: {
+                type: "number"
+              },
+              usuario_email: {
+                type: 'string',
+              },
+              usuario_medida_id: {
+                type: 'string',
+              },
+              usuario_rol_id: {
+                type: 'string',
+              },
+              usuario_contrasenya: {
+                type: 'string',
+              },
+            },
+          }
         },
       },
     })
     usuario: Usuario,
-  ): Promise<void> {
+  ): Promise<void | {
+    "error": string,
+    "message": string
+  }> {
     let original = await this.usuarioRepository.findById(id);
-    let updated = await this.usuarioRepository.updateById(id, usuario);
+    if (usuario.usuario_email != "") {
+      original.usuario_email = usuario.usuario_email;
+    }
+    if (usuario.usuario_contrasenya != "") {
+      if (usuario.usuario_contrasenya.length < 8) {
+
+        return {"error": "error_contrasenya_invalid", message: "La contrasea debe tener 8 caracteres."};
+      }
+      original.usuario_contrasenya = await argon2.hash(
+        usuario.usuario_contrasenya,
+        {
+          type: argon2.argon2i,
+          memoryCost: 8192,
+          timeCost: 56,
+          parallelism: 8,
+          hashLength: 64,
+          saltLength: 24,
+        }
+      )
+    }
+    if (usuario.usuario_medida_id != undefined) {
+      original.usuario_medida_id = usuario.usuario_medida_id;
+    }
+    if (usuario.usuario_rol_id != undefined) {
+      original.usuario_rol_id = usuario.usuario_rol_id;
+    }
+    let updated = await this.usuarioRepository.updateById(id, original);
     await this.acciones.create(new AccionesRealizadas({
       acciones_id_app: APPAuthenticationStrategy.CURRENT_APP.app_id,
       acciones_id_tabla: "" + id,
