@@ -339,6 +339,7 @@ export class ClienteCrudController {
       acciones_tipo: "actualizar/id"
     }));
 
+
   }
 
   @put('/cliente/remplazar/{id}')

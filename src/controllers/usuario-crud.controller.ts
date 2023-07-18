@@ -397,7 +397,7 @@ export class UsuarioCrudController {
                 type: 'string',
               },
               usuario_medida_id: {
-                type: 'string',
+                type: 'number',
               },
               usuario_rol_id: {
                 type: 'string',

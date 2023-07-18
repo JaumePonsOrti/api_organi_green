@@ -25,7 +25,7 @@ export class Enlace_Menu {
   nombre_del_campo: string;
   tipo_de_view: string;
   controlador: string;
-  configuracion_view!: Configuracion_View;
+  configuracion_view: Configuracion_View;
   sub_elementos!: Enlace_Menu[];
   clase_extra: string = "";
   //puede ser  menu-open
