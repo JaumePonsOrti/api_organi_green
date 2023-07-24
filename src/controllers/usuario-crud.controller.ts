@@ -200,7 +200,7 @@ export class UsuarioCrudController {
                 type: 'string',
               },
               usuario_rol_id: {
-                type: 'string',
+                type: 'number',
               },
               usuario_contrasenya: {
                 type: 'string',
@@ -222,7 +222,7 @@ export class UsuarioCrudController {
       {
         usuario_email: 'string',
         usuario_medida_id: 'string',
-        usuario_rol_id: 'string',
+        usuario_rol_id: 'number',
         usuario_contrasenya: 'string'
       },
       'usuario_id'>,
@@ -236,7 +236,7 @@ export class UsuarioCrudController {
     console.log("Post newUsuario: ", newUsuario);
     newUsuario.usuario_rol_id = parseInt(usuario.usuario_rol_id) ?? 6;
     newUsuario.usuario_email = usuario.usuario_email;
-    newUsuario.usuario_medida_id = usuario.usuario_medida_id ? parseInt(usuario.usuario_medida_id) : undefined;
+    newUsuario.usuario_medida_id = usuario.usuario_medida_id ? parseInt(usuario.usuario_medida_id) : 1;
     if (usuario.usuario_contrasenya.length < 8) {
       return {"error": "error_contrasenya_invalid", message: "La contrasea debe tener 8 caracteres."};
     }
@@ -268,6 +268,7 @@ export class UsuarioCrudController {
       acciones_tipo: "crear"
     }));
 
+    usuario_creado.usuario_contrasenya = "";
     return usuario_creado;
   }
 

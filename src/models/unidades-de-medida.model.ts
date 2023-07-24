@@ -1,7 +1,7 @@
 import {Entity, model, property} from '@loopback/repository';
 
 @model()
-export class UnidadesDeMedida extends Entity {
+export class Unidades_De_Medida extends Entity {
   @property({
     type: 'number',
     id: true,
@@ -33,13 +33,13 @@ export class UnidadesDeMedida extends Entity {
   })
   medida_region: string;
 
-  constructor(data?: Partial<UnidadesDeMedida>) {
+  constructor(data?: Partial<Unidades_De_Medida>) {
     super(data);
   }
 }
 
-export interface UnidadesDeMedidaRelations {
+export interface Unidades_De_MedidaRelations {
   // describe navigational properties here
 }
 
-export type UnidadesDeMedidaWithRelations = UnidadesDeMedida & UnidadesDeMedidaRelations;
+export type Unidades_De_MedidaWithRelations = Unidades_De_Medida & Unidades_De_MedidaRelations;

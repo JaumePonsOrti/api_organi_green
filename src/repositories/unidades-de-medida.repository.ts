@@ -1,16 +1,16 @@
 import {inject} from '@loopback/core';
 import {DefaultCrudRepository} from '@loopback/repository';
 import {DbDataSource} from '../datasources';
-import {UnidadesDeMedida, UnidadesDeMedidaRelations} from '../models';
+import {Unidades_De_Medida, Unidades_De_MedidaRelations} from '../models';
 
-export class UnidadesDeMedidaRepository extends DefaultCrudRepository<
-  UnidadesDeMedida,
-  typeof UnidadesDeMedida.prototype.medida_id,
-  UnidadesDeMedidaRelations
+export class Unidades_De_MedidaRepository extends DefaultCrudRepository<
+  Unidades_De_Medida,
+  typeof Unidades_De_Medida.prototype.medida_id,
+  Unidades_De_MedidaRelations
 > {
   constructor(
     @inject('datasources.db') dataSource: DbDataSource,
   ) {
-    super(UnidadesDeMedida, dataSource);
+    super(Unidades_De_Medida, dataSource);
   }
 }

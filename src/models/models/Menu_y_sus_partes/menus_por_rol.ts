@@ -63,7 +63,7 @@ export class Menus_por_rol {
   };
 
   public elementoPorRol_id: any = {
-    0: this.elementoPorRol_Nombre.Sistema,
+    8: this.elementoPorRol_Nombre.Sistema,
     1: this.elementoPorRol_Nombre.Admin,
     6: this.elementoPorRol_Nombre.Sin_Loguear,
     7: this.elementoPorRol_Nombre.Trabajador_de_Campo

@@ -18,19 +18,19 @@ export class APPAuthenticationStrategy implements AuthenticationStrategy {
 
   async authenticate(request: Request): Promise<App | undefined | any> {
     const app_token = this.extractAPPKey(request);
-    console.log("app_token:", app_token);
+    //console.log("app_token:", app_token);
     const foundAPP = await this.appRepository.findOne({
       where: {app_token: app_token},
     });
 
-    console.log("foundAPP:", foundAPP);
+    //console.log("foundAPP:", foundAPP);
 
     const foundRolApp = await this.rolAppRepository.find({
       where: {
         permisos_de_rol_app_app_id: foundAPP?.app_id
       }
     });
-    console.log("foundAPPRol:", foundRolApp);
+    //console.log("foundAPPRol:", foundRolApp);
     var foundPermisosApp = [];
     for (let index = 0; index < foundRolApp.length; index++) {
       var permisos = await this.permisosRolRepository.find({
