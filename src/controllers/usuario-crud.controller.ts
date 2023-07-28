@@ -197,7 +197,7 @@ export class UsuarioCrudController {
                 type: 'string',
               },
               usuario_medida_id: {
-                type: 'string',
+                type: 'number',
               },
               usuario_rol_id: {
                 type: 'number',
@@ -221,7 +221,7 @@ export class UsuarioCrudController {
     usuario: Omit<
       {
         usuario_email: 'string',
-        usuario_medida_id: 'string',
+        usuario_medida_id: 'number',
         usuario_rol_id: 'number',
         usuario_contrasenya: 'string'
       },
@@ -398,7 +398,7 @@ export class UsuarioCrudController {
                 type: 'string',
               },
               usuario_medida_id: {
-                type: 'number',
+                type: 'string',
               },
               usuario_rol_id: {
                 type: 'string',
