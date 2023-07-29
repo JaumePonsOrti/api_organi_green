@@ -1,16 +1,16 @@
 import {inject} from '@loopback/core';
 import {DefaultCrudRepository} from '@loopback/repository';
 import {DbDataSource} from '../datasources';
-import {ProductosPlanificados, ProductosPlanificadosRelations} from '../models';
+import {Productos_Planificados, ProductosPlanificadosRelations} from '../models';
 
 export class ProductosPlanificadosRepository extends DefaultCrudRepository<
-  ProductosPlanificados,
-  typeof ProductosPlanificados.prototype.product_plan_id,
+  Productos_Planificados,
+  typeof Productos_Planificados.prototype.productos_planificados_id,
   ProductosPlanificadosRelations
 > {
   constructor(
     @inject('datasources.db') dataSource: DbDataSource,
   ) {
-    super(ProductosPlanificados, dataSource);
+    super(Productos_Planificados, dataSource);
   }
 }
