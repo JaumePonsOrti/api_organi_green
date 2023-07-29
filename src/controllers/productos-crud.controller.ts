@@ -185,18 +185,46 @@ export class ProductosCrudController {
     content: {'application/json': {schema: getModelSchemaRef(Productos)}},
   })
   async create(
-    @requestBody({
-      content: {
-        'application/json': {
-          schema: getModelSchemaRef(Productos, {
-            title: 'NewUsuario',
-            exclude: ['productos_id'],
-          }),
+    content: {
+      'application/json': {
+        schema: {
+          type: 'object',
+          required: ['productos_nombre', 'productos_precio', "productos_medida_id"],
+          properties: {
+            productos_id: {
+              type: 'number',
+            },
+            productos_numero_registro: {
+              type: 'string',
+            },
+            productos_nombre: {
+              type: 'string',
+            },
+            productos_precio: {
+              type: 'number',
+            },
+            productos_cantidad_referenciada: {
+              type: 'number',
+            },
+            productos_medida_id: {
+              type: 'number',
+            },
+          },
         },
       },
-    })
-    usuario: Omit<Productos, 'productos_id'>,
+    },
+    usuario: Omit<
+      {
+        productos_id?: number;
+        productos_numero_registro?: string;
+        productos_nombre?: string;
+        productos_precio?: number;
+        productos_cantidad_referenciada?: number;
+        productos_medida_id?: number;
+      },
+      'usuario_id'>,
   ): Promise<Productos> {
+    console.log("ENTRO EN CREAAAAR");
     let productos_creado = await this.productosRepository.create(usuario);
     Object.keys(productos_creado).forEach(async element => {
       //Mover acciones create aquí dentro

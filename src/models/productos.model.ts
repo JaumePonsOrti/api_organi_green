@@ -17,27 +17,27 @@ export class Productos extends Entity {
 
   @property({
     type: 'string',
-    required: true,
+    //required: true,
   })
-  productos_nombre: string;
+  productos_nombre?: string;
 
   @property({
     type: 'number',
-    required: true,
+    //required: true,
   })
-  productos_precio: number;
+  productos_precio?: number;
 
   @property({
     type: 'number',
-    required: true,
+    //required: true,
   })
-  productos_cantidad_referenciada: number;
+  productos_cantidad_referenciada?: number;
 
   @property({
     type: 'number',
-    required: true,
+    //required: true,
   })
-  productos_medida_id: number;
+  productos_medida_id?: number;
 
   @property({
     type: 'date',
@@ -46,9 +46,9 @@ export class Productos extends Entity {
 
   @property({
     type: 'number',
-    required: true,
+    //required: true,
   })
-  productos_subido: number;
+  productos_subido?: number;
 
   constructor(data?: Partial<Productos>) {
     super(data);
