@@ -17,18 +17,21 @@ export class Planificacion extends Entity {
 
   @property({
     type: 'date',
+
   })
-  planificacion_fecha_realizar?: string;
+  planificacion_fecha_realizar: string;
 
   @property({
     type: 'date',
+    default: new Date()
   })
-  planificacion_timestamp_inicio?: string;
+  planificacion_timestamp_inicio: string;
 
   @property({
     type: 'date',
+    default: new Date()
   })
-  planificacion_timestamp_final?: string;
+  planificacion_timestamp_final: string;
 
   @property({
     type: 'number',

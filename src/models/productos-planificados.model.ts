@@ -1,38 +1,37 @@
 import {Entity, model, property} from '@loopback/repository';
 
 @model()
-export class ProductosPlanificados extends Entity {
+export class Productos_Planificados extends Entity {
   @property({
     type: 'number',
     id: true,
     generated: true,
   })
-  product_plan_id?: number;
+  productos_planificados_id?: number;
 
   @property({
     type: 'number',
-    required: true,
   })
-  product_plan_id_producto: number;
+  productos_planificados_id_producto: number;
 
   @property({
     type: 'number',
-    required: true,
+
   })
-  product_plan_id_planificaion: number;
+  productos_planificados_id_planificacion: number;
 
   @property({
     type: 'string',
   })
-  product_plan_numero_de_lote?: string;
+  productos_planificados_numero_de_lote?: string;
 
   @property({
     type: 'number',
-    required: true,
-  })
-  product_plan_producto_dueño: number;
 
-  constructor(data?: Partial<ProductosPlanificados>) {
+  })
+  productos_planificados_producto_dueño: number;
+
+  constructor(data?: Partial<Productos_Planificados>) {
     super(data);
   }
 }
@@ -42,4 +41,4 @@ export interface ProductosPlanificadosRelations {
   // describe navigational properties here
 }
 
-export type ProductosPlanificadosWithRelations = ProductosPlanificados & ProductosPlanificadosRelations;
+export type ProductosPlanificadosWithRelations = Productos_Planificados & ProductosPlanificadosRelations;

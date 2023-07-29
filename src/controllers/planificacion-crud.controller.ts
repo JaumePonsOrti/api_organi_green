@@ -189,16 +189,37 @@ export class PlanificacionCrudController {
     @requestBody({
       content: {
         'application/json': {
-          schema: getModelSchemaRef(Planificacion, {
-            title: 'NewUsuario',
-            exclude: ['planificacion_id'],
-          }),
+          schema: {
+            type: 'object',
+            required: ['planificacion_id_campo'],
+            properties: {
+              planificacion_id: {
+                type: 'number',
+              },
+              planificacion_id_campo: {
+                type: 'number',
+              },
+              planificacion_fecha_realizar: {
+                type: 'string',
+              },
+              planificacion_estado: {
+                type: 'number',
+                default: 0
+              },
+            },
+          },
         },
       },
     })
-    usuario: Omit<Planificacion, 'planificacion_id'>,
+    planificacion: Omit<{
+      planificacion_id: number,
+      planificacion_id_campo: number,
+      planificacion_fecha_realizar: string,
+      planificacion_estado?: number,
+    }, 'planificacion_id'>,
   ): Promise<Planificacion> {
-    let usuario_creado = await this.planificacionRepository.create(usuario);
+    console.log('ENTRO EN CREAR PLANIFICACIÓN');
+    let usuario_creado = await this.planificacionRepository.create(planificacion);
     Object.keys(usuario_creado).forEach(async element => {
       //Mover acciones create aquí dentro
     });
