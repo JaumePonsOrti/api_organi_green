@@ -18,3 +18,4 @@ export * from './usuario-crud.controller';
 export * from './usuario.controller';
 
 
+export * from './ver-planificacion.controller';

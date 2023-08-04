@@ -21,7 +21,7 @@ export class Elementos_menu {
     new Enlace_Menu(
       "Ver Planificación",
       "planificar",
-      "desplegable",
+      "ver-planificacion",
       "fas fa-tachometer-alt",
       new Configuracion_View(
         [],
@@ -32,7 +32,7 @@ export class Elementos_menu {
     new Enlace_Menu(
       "Ver Planificación En Campo",
       "planificar",
-      "desplegable",
+      "ver-planificacion-en-campo",
       "fas fa-tachometer-alt",
       new Configuracion_View(
         [],
