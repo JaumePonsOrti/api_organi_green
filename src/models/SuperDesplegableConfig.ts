@@ -12,6 +12,9 @@ export class SuperDesplegableConfig {
 
   @property()
   collapsed: boolean;
+
+  @property()
+  dato_por_el_que_filtrar?: string;
 }
 
 @model()

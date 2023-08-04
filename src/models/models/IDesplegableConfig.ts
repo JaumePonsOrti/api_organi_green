@@ -3,6 +3,7 @@ export interface ISuperDesplegableConfig {
     headersDesplegable: ICabezeraDesplegableConfig[];
     componente_interno: ISuperDesplegableComponenteInternoConfig;
     collapsed: boolean;
+    dato_por_el_que_filtrar?: string;
 }
 /*
 El nombre del campo se puede omitir

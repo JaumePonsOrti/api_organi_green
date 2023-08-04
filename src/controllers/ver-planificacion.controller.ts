@@ -266,6 +266,7 @@ export class VerPlanificacionController {
         },
 
         collapsed: true,
+        dato_por_el_que_filtrar: planificacion["planificacion_fecha_realizar"]
       }
 
       returnable.push(objetoIDesplegableConfigPlanificacion);
