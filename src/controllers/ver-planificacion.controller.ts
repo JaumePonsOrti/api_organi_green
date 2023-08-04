@@ -169,6 +169,13 @@ export class VerPlanificacionController {
         }
       ];
 
+      let tamnayo_campo = 0;
+      //Calcular tamaño campo
+      for (var i = 0; i < listaParcelasCampo.length; i++) {
+        let parcela = listaParcelasCampo[i];
+        tamnayo_campo = tamnayo_campo + parcela.tamanyo_m2;
+      }
+
       let listaSuperDesplegableConfigParcela: SuperDesplegableConfig[] = [];
       for (let j = 0; j < listaParcelasCampo.length; j++) {
         let parcela = listaParcelasCampo[j];
@@ -201,15 +208,14 @@ export class VerPlanificacionController {
 
           let dosis = producto["productos_cantidad_referenciada"];
           let unidad_medida_en_metros_cuadrados = this.objetoConMedidasPorId[producto["productos_medida_id"]]["medida_metros_cuadrados"];
-          let dosis_por_parcela = [parcela["tamanyo_m2"] * (dosis / unidad_medida_en_metros_cuadrados)];
+          let dosis_por_parcela = parcela["tamanyo_m2"] * (dosis / unidad_medida_en_metros_cuadrados);
 
           if (typeof this.objetoDosisDeCadaCampoPorProducto[producto["productos_id"]] === "undefined") {
             this.objetoDosisDeCadaCampoPorProducto[producto["productos_id"]] = 0;
           }
-
+          let dosis_por_campo = tamnayo_campo * (dosis / unidad_medida_en_metros_cuadrados);
           this.objetoDosisDeCadaCampoPorProducto[producto["productos_id"]] =
-            this.objetoDosisDeCadaCampoPorProducto[producto["productos_id"]] +
-            dosis_por_parcela[0];
+            dosis_por_campo;
 
           let objeto: any = {
             producto_id: producto["productos_id"],
