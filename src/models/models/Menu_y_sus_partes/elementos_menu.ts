@@ -43,7 +43,7 @@ export class Elementos_menu {
     new Enlace_Menu(
       "Resumen planificacion",
       "desplegable",
-      "producto",
+      "resumen-producto",
       "fas fa-tachometer-alt",
       new Configuracion_View(
         [],

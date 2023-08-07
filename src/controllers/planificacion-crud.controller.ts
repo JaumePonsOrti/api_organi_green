@@ -33,7 +33,8 @@ export class PlanificacionCrudController {
     public bearerAuthenticationStrategy: BearerAuthenticationStrategy,
     @repository(PlanificacionRepository)
     public planificacionRepository: PlanificacionRepository,
-    @inject('controllers.AccionesRealizadasCrudController') public acciones: AccionesRealizadasCrudController
+    @inject('controllers.AccionesRealizadasCrudController')
+    public acciones: AccionesRealizadasCrudController
 
   ) { }
 

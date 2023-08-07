@@ -17,7 +17,7 @@ import {ICabezeraDesplegableConfig} from '../models/models/IDesplegableConfig';
 import {CampoRepository, ClienteRepository, ParcelasRepository, PlanificacionRepository, ProductosPlanificadosRepository, ProductosRepository, Unidades_De_MedidaRepository} from '../repositories';
 import {AccionesRealizadasCrudController} from './acciones-realizadas-crud.controller';
 
-export class VerPlanificacionController {
+export class VerPlanificacionCampoController {
 
   constructor(
     @inject('authentication.strategies.app')
@@ -60,7 +60,7 @@ export class VerPlanificacionController {
   private objetoConMedidasPorId: any = {}
   private objetoDosisDeCadaCampoPorProducto: any = {};
 
-  @get('/ver_planificacion/ver/todos')
+  @get('/ver_planificacion_en_campo/ver/todos')
   @response(200, {
     description: 'Array of Parcelas model instances',
     content: {
@@ -140,7 +140,6 @@ export class VerPlanificacionController {
       acciones_tabla_acción: "Parcelas",
       acciones_tipo: "ver/todos"
     }));
-
     let returnable: SuperDesplegableConfig[] = [];
     for (let index = 0; index < this.listaPlanificaciones.length; index++) {
       this.objetoDosisDeCadaCampoPorProducto = {};
@@ -154,6 +153,14 @@ export class VerPlanificacionController {
       console.log("Campo:", campo);
 
       let cliente = this.objetoConClientesPorId[campo["campo_cliente_id"]];
+
+
+      let tamnayo_campo = 0;
+      //Calcular tamaño campo
+      for (var i = 0; i < listaParcelasCampo.length; i++) {
+        let parcela = listaParcelasCampo[i];
+        tamnayo_campo = tamnayo_campo + parcela.tamanyo_m2;
+      }
       let cabeceraDesplegableCampo: ICabezeraDesplegableConfig[] = [
         {
           nombre_campo: "Nombre Cliente",
@@ -166,103 +173,63 @@ export class VerPlanificacionController {
         {
           nombre_campo: "Tamaño de facturacion",
           dato_mostrado: campo["campo_tamanyo_facturacion"]
+        },
+        {
+          nombre_campo: "Tamaño real en m2",
+          dato_mostrado: tamnayo_campo
         }
       ];
 
-      let tamnayo_campo = 0;
-      //Calcular tamaño campo
-      for (var i = 0; i < listaParcelasCampo.length; i++) {
-        let parcela = listaParcelasCampo[i];
-        tamnayo_campo = tamnayo_campo + parcela.tamanyo_m2;
+      let listaProductosAImprimirEnTabla: any = [];
+
+      let listaSuperDesplegableConfigParcela: SuperDesplegableConfig;
+
+      let listaProductosPlanificadosI = this.objetoConProductosPlanificacadosOrdenadosPorPlanificacion[planificacion["planificacion_id"]] ?? [];
+      //FOR PARA CREAR LOS OBJETOS DE PRODUCTOS a mostrar, calcular dosis
+      for (let index2 = 0; index2 < listaProductosPlanificadosI.length; index2++) {
+        console.log("ENTRO EN FOR PRODUCTOS, index2:", index2);
+        let productoPlan = listaProductosPlanificadosI[index2];
+        let producto = this.objetoConProductosPorId[productoPlan["productos_planificados_id_producto"]]
+
+        let dosis = producto["productos_cantidad_referenciada"];
+        let unidad_medida_en_metros_cuadrados = this.objetoConMedidasPorId[producto["productos_medida_id"]]["medida_metros_cuadrados"];
+
+        if (typeof this.objetoDosisDeCadaCampoPorProducto[producto["productos_id"]] === "undefined") {
+          this.objetoDosisDeCadaCampoPorProducto[producto["productos_id"]] = 0;
+        }
+        let dosis_por_campo = tamnayo_campo * (dosis / unidad_medida_en_metros_cuadrados);
+        this.objetoDosisDeCadaCampoPorProducto[producto["productos_id"]] =
+          dosis_por_campo;
+
+        let objeto: any = {
+          producto_id: producto["productos_id"],
+          producto_nombre: producto["productos_nombre"],
+          dosis_por_campo: this.objetoDosisDeCadaCampoPorProducto[producto["productos_id"]],
+          editable: false
+        }
+        console.log("Objetos producto:", objeto);
+        listaProductosAImprimirEnTabla.push(objeto);
+        console.log("Lista Productos Dentro for parcelas:", listaProductosAImprimirEnTabla);
       }
 
-      let listaSuperDesplegableConfigParcela: SuperDesplegableConfig[] = [];
-      for (let j = 0; j < listaParcelasCampo.length; j++) {
-        let parcela = listaParcelasCampo[j];
-        let cabeceraDesplegableParcela: ICabezeraDesplegableConfig[] = [
-          {
-            nombre_campo: "Numero Poligono",
-            dato_mostrado: parcela.parcelas_poligono
-          },
-          {
-            nombre_campo: "Numero Parcela",
-            dato_mostrado: parcela.parcelas_parcela
-          },
-          {
-            nombre_campo: "Numero/Codigo Provincia",
-            dato_mostrado: parcela.parcelas_provincia
-          },
-          {
-            nombre_campo: "Numero/Codigo municipio",
-            dato_mostrado: parcela.parcelas_municipio
-          }
-        ];
-        let listaProductosPlanificadosI = this.objetoConProductosPlanificacadosOrdenadosPorPlanificacion[planificacion["planificacion_id"]] ?? [];
-
-        let listaProductosAImprimirEnTabla: any[] = [];
-        //FOR PARA CREAR LOS OBJETOS DE PRODUCTOS a mostrar, calcular dosis
-        for (let index2 = 0; index2 < listaProductosPlanificadosI.length; index2++) {
-          console.log("ENTRO EN FOR PRODUCTOS, index2:", index2);
-          let productoPlan = listaProductosPlanificadosI[index2];
-          let producto = this.objetoConProductosPorId[productoPlan["productos_planificados_id_producto"]]
-
-          let dosis = producto["productos_cantidad_referenciada"];
-          let unidad_medida_en_metros_cuadrados = this.objetoConMedidasPorId[producto["productos_medida_id"]]["medida_metros_cuadrados"];
-          let dosis_por_parcela = parcela["tamanyo_m2"] * (dosis / unidad_medida_en_metros_cuadrados);
-
-          if (typeof this.objetoDosisDeCadaCampoPorProducto[producto["productos_id"]] === "undefined") {
-            this.objetoDosisDeCadaCampoPorProducto[producto["productos_id"]] = 0;
-          }
-          let dosis_por_campo = tamnayo_campo * (dosis / unidad_medida_en_metros_cuadrados);
-          this.objetoDosisDeCadaCampoPorProducto[producto["productos_id"]] =
-            dosis_por_campo;
-
-          let objeto: any = {
-            producto_id: producto["productos_id"],
-            producto_nombre: producto["productos_nombre"],
-            dosis_por_parcela: dosis_por_parcela,
-            dosis_por_campo: this.objetoDosisDeCadaCampoPorProducto[producto["productos_id"]],
-            editable: false
-          }
-          console.log("Objetos producto:", objeto);
-          listaProductosAImprimirEnTabla.push(objeto);
-          console.log("Lista Productos Dentro for parcelas:", listaProductosAImprimirEnTabla);
-        }
-        console.log("Lista Productos:", listaProductosAImprimirEnTabla);
-
-
-        //Declaro un objeto  temporal para poder añadirlo a  una lista de objetos SuperDesplegableConfig
-        //Hay un SuperDesplegableConfig por parcela
-        let objetoIDesplegableConfig: SuperDesplegableConfig = {
-          headersDesplegable: cabeceraDesplegableParcela,
-          componente_interno: {
-            type: "super-table",
-            config_table: {
-              configTable: {
-                canDelete: false,
-                canEdit: false,
-              },
-              headersArrayTable: [
-                "ID",
-                "Producto Nombre",
-                "Dosis Parcela",
-                "Dosis Total Campo ",
-                "editable"
-              ],
-              listaContenidos: listaProductosAImprimirEnTabla
-            }
-          },
-
-          collapsed: true,
-        }
-        listaSuperDesplegableConfigParcela.push(objetoIDesplegableConfig);
-      }
 
       let objetoIDesplegableConfigPlanificacion: SuperDesplegableConfig = {
         headersDesplegable: cabeceraDesplegableCampo,
         componente_interno: {
-          type: "super-desplegable",
-          config_desplegable: listaSuperDesplegableConfigParcela
+          type: "super-table",
+          config_table: {
+            configTable: {
+              canDelete: false,
+              canEdit: false,
+            },
+            headersArrayTable: [
+              "ID",
+              "Producto Nombre",
+              "Dosis Total Campo (L/kg)",
+              "editable"
+            ],
+            listaContenidos: listaProductosAImprimirEnTabla
+          }
         },
 
         collapsed: true,

@@ -391,22 +391,19 @@ export class UsuarioCrudController {
             type: 'object',
             required: ['usuario_email', 'usuario_rol_id', 'usuario_id'],
             properties: {
-              usuario_id: {
-                type: "number"
-              },
               usuario_email: {
                 type: 'string',
               },
               usuario_medida_id: {
-                type: 'string',
+                type: 'number',
               },
               usuario_rol_id: {
-                type: 'string',
+                type: 'number',
               },
               usuario_contrasenya: {
                 type: 'string',
               },
-            },
+            }
           }
         },
       },

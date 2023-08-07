@@ -193,14 +193,42 @@ export class ParcelasCrudController {
     @requestBody({
       content: {
         'application/json': {
-          schema: getModelSchemaRef(Parcelas, {
-            title: 'NewUsuario',
-            exclude: ['parcelas_id'],
-          }),
+          schema: {
+            type: 'object',
+            required: ['planificacion_id_campo'],
+            properties: {
+
+              parcelas_poligono: {
+                type: 'number',
+              },
+              parcelas_parcela: {
+                type: 'number',
+              },
+              parcelas_provincia: {
+                type: 'number',
+              },
+              parcelas_municipio: {
+                type: 'number',
+              },
+              parcelas_campo_id: {
+                type: 'number',
+              },
+              tamanyo_m2: {
+                type: 'number',
+              },
+            },
+          },
         },
       },
     })
-    usuario: Omit<Parcelas, 'parcelas_id'>,
+    usuario: Omit<{
+      parcelas_poligono?: number;
+      parcelas_parcela?: number;
+      parcelas_provincia?: number;
+      parcelas_municipio?: number;
+      parcelas_campo_id?: number;
+      tamanyo_m2?: number;
+    }, 'parcelas_id'>,
   ): Promise<Parcelas> {
     let parcelas_creado = await this.parcelasRepository.create(usuario);
     Object.keys(parcelas_creado).forEach(async element => {
