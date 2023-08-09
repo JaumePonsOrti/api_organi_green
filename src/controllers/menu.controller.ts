@@ -32,17 +32,18 @@ export class MenuController {
     const rol_app: Permisos_De_Rol_App[] = await this.permisos_de_rol.findByApp(app.app_id ?? 0);
 
     let menus = this.menuPorRol.elementoPorRol_id[6];
+    menus = this.menuPorRol.elementoPorRol_id[usuario.usuario_rol_id];
     for (let index = 0; index < rol_app.length; index++) {
       const element = rol_app[index];
-      if (usuario.usuario_rol_id < element.permisos_de_rol_app_rol_id) {
-        menus = this.menuPorRol.elementoPorRol_id[element.permisos_de_rol_app_rol_id]
-      }
-      else if (usuario.usuario_rol_id > element.permisos_de_rol_app_rol_id) {
-        menus = this.menuPorRol.elementoPorRol_id[usuario.usuario_rol_id]
-      }
-      else if (element.permisos_de_rol_app_rol_id == usuario.usuario_rol_id) {
-        menus = this.menuPorRol.elementoPorRol_id[usuario.usuario_rol_id];
-      }
+      /* if (usuario.usuario_rol_id < element.permisos_de_rol_app_rol_id) {
+         menus = this.menuPorRol.elementoPorRol_id[element.permisos_de_rol_app_rol_id]
+       }
+       else if (usuario.usuario_rol_id > element.permisos_de_rol_app_rol_id) {
+         menus = this.menuPorRol.elementoPorRol_id[usuario.usuario_rol_id]
+       }
+       else if (element.permisos_de_rol_app_rol_id == usuario.usuario_rol_id) {
+         menus = this.menuPorRol.elementoPorRol_id[usuario.usuario_rol_id];
+       }*/
     }
     return {
       menus: menus,

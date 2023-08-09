@@ -57,6 +57,7 @@ export class Menus_por_rol {
     ],
     "Sin_Loguear": [],
     "Trabajador_de_Campo": [
+
       this.enlaces_menu_disponible[2],
       this.enlaces_menu_disponible[3],
     ]
@@ -65,8 +66,8 @@ export class Menus_por_rol {
   public elementoPorRol_id: any = {
     8: this.elementoPorRol_Nombre.Sistema,
     1: this.elementoPorRol_Nombre.Admin,
-    6: this.elementoPorRol_Nombre.Sin_Loguear,
-    7: this.elementoPorRol_Nombre.Trabajador_de_Campo
+    4: this.elementoPorRol_Nombre.Trabajador_de_Campo,
+    6: this.elementoPorRol_Nombre.Sin_Loguear
   }
 
 }
