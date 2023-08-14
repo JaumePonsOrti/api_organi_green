@@ -1,7 +1,19 @@
 export * from './app.model';
-export * from './rol.model';
-export * from './usuario.model';
-
+export * from './models/Menu_y_sus_partes/elementos_menu';
+export * from './models/Menu_y_sus_partes/enlace_menu';
+export * from './models/Menu_y_sus_partes/menus_por_rol';
 export * from './permisos-de-rol-app.model';
 export * from './permisos-rol.model';
 export * from './permisos.model';
+export * from './rol.model';
+export * from './usuario.model';
+
+export * from './acciones-realizadas.model';
+export * from './asignacion.model';
+export * from './campo.model';
+export * from './cliente.model';
+export * from './parcelas.model';
+export * from './planificacion.model';
+export * from './productos.model';
+export * from './productos-planificados.model';
+export * from './unidades-de-medida.model';

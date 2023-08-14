@@ -9,6 +9,7 @@ import {PermisosRolRepository, UsuarioRepository} from './repositories';
 
 export class BearerAuthenticationStrategy implements AuthenticationStrategy {
   name = 'Bearer';
+  public static CURRENT_USER: Usuario;
 
   constructor(
     @repository(UsuarioRepository) protected userRepository: UsuarioRepository,
@@ -19,10 +20,11 @@ export class BearerAuthenticationStrategy implements AuthenticationStrategy {
     //Primero se comprueba si es el metodo login o no
     const partes = RequestHelper.getRequestPorPartes(request);
     const accesoSinTokenPermitido =
-      partes[0] == "usuario" && partes[1] && partes[1] == "login"
+      partes[0] == "usuario" && partes[1] && partes[1] == "login" ||
+      partes[0] === "ping"
       ;//|| partes[0] == "usuario" && partes[1] && partes[1] == "recuperar_password";
 
-    console.log("Acceso Sin Token Permitido:", accesoSinTokenPermitido);
+    //console.log("Acceso Sin Token Permitido:", accesoSinTokenPermitido);
 
     return accesoSinTokenPermitido;
 
@@ -42,7 +44,7 @@ export class BearerAuthenticationStrategy implements AuthenticationStrategy {
 
 
 
-    console.log("USUARIO:", foundUser);
+    //console.log("USUARIO:", foundUser);
 
     if (!foundUser) {
       throw new HttpErrors.Unauthorized(`Invalid token`);
@@ -55,7 +57,7 @@ export class BearerAuthenticationStrategy implements AuthenticationStrategy {
     if (await !requestHelper.valiadateRequestIfIsPermitedSearchingByRequest(request, foundUser)) {
       throw new HttpErrors.Unauthorized(`Invalid auth`);
     }
-
+    BearerAuthenticationStrategy.CURRENT_USER = foundUser;
 
     return foundUser;
     //return {id: foundUser.id?.toString(), name: foundUser.username};
@@ -70,7 +72,7 @@ export class BearerAuthenticationStrategy implements AuthenticationStrategy {
 
   extractCredentials(request: Request): string {
     if (!request.headers.authorization) {
-      throw new HttpErrors.Unauthorized(`Authorization header not found.12`);
+      throw new HttpErrors.Unauthorized(`Authorization header not found.`);
     }
 
 
@@ -83,9 +85,10 @@ export class BearerAuthenticationStrategy implements AuthenticationStrategy {
     }
 
     const parts = authHeaderValue.split(' ');
+    console.log(parts);
     if (parts.length !== 2)
       throw new HttpErrors.Unauthorized(
-        `Authorization header value has too many parts. It must follow the pattern: 'Bearer <token>' where <token> is a string.`,
+        `Authorization header value has too many parts. It must follow the pattern: 'Bearer <user token>' where <token> is a string.`,
       );
     const token = parts[1];
 

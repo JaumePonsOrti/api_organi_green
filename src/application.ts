@@ -11,6 +11,7 @@ import {ServiceMixin} from '@loopback/service-proxy';
 import path from 'path';
 import {APPAuthenticationStrategy} from './app-strategy';
 import {BearerAuthenticationStrategy} from './bearer-strategy';
+import {Elementos_menu, Enlace_Menu, Menus_por_rol} from './models';
 import {MySequence} from './sequence';
 export {ApplicationConfig};
 export class ApiOrganiGreenApplication extends BootMixin(
@@ -43,6 +44,14 @@ export class ApiOrganiGreenApplication extends BootMixin(
         nested: true,
       },
     };
+    //ANADIR Menu_por_rol
+    this.bind('models.models.Menu_y_sus_partes.Enlace_Menu').toClass(Enlace_Menu);
+    //ANADIR Elementos_menu
+    this.bind('models.models.Menu_y_sus_partes.Elementos_menu').toClass(Elementos_menu);
+    //ANADIR Menu_por_rol
+    this.bind('models.models.Menu_y_sus_partes.Menu_Por_Rol').toClass(Menus_por_rol);
+
+
     //Añadir accion de la estrategia a la app
     this.bind('authentication.strategies.bearer').toClass(BearerAuthenticationStrategy);
     // Register your custom authentication strategy

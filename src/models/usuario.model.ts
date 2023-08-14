@@ -28,16 +28,19 @@ export class Usuario extends Entity {
 
   @property({
     type: 'date',
+    default: new Date()
   })
   usuario_cad_token: Date;
 
   @property({
     type: 'number',
+    default: 0
   })
   usuario_intentos_fallidos: number;
 
   @property({
     type: 'date',
+    default: new Date()
   })
   usuario_fecha_bloqueo: Date;
 
@@ -64,7 +67,7 @@ export class Usuario extends Entity {
   @property({
     type: 'number',
   })
-  usuario_rol_id?: number;
+  usuario_rol_id: number;
 
 
   constructor(data?: Partial<Usuario>) {

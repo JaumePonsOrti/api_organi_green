@@ -13,4 +13,10 @@ export class PermisosDeRolAppRepository extends DefaultCrudRepository<
   ) {
     super(Permisos_De_Rol_App, dataSource);
   }
+
+  public async findByApp(app: number) {
+    return await this.find({
+      where: {permisos_de_rol_app_app_id: app}
+    });
+  }
 }
