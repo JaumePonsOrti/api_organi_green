@@ -204,7 +204,7 @@ export class VerPlanificacionController {
         for (let index2 = 0; index2 < listaProductosPlanificadosI.length; index2++) {
           console.log("ENTRO EN FOR PRODUCTOS, index2:", index2);
           let productoPlan = listaProductosPlanificadosI[index2];
-          let producto = this.objetoConProductosPorId[productoPlan["productos_planificados_id_producto"]]
+          let producto = this.objetoConProductosPorId[productoPlan["productos_planificados_id_producto"]];
 
           let dosis = producto["productos_cantidad_referenciada"];
           let unidad_medida_en_metros_cuadrados = this.objetoConMedidasPorId[producto["productos_medida_id"]]["medida_metros_cuadrados"];
