@@ -33,7 +33,6 @@ export class ProductosCrudController {
     @repository(ProductosRepository)
     public productosRepository: ProductosRepository,
     @inject('controllers.AccionesRealizadasCrudController') public acciones: AccionesRealizadasCrudController
-
   ) { }
 
   //____________________________ METODOS CAN ACTIVATE ______________________________
@@ -185,34 +184,37 @@ export class ProductosCrudController {
     content: {'application/json': {schema: getModelSchemaRef(Productos)}},
   })
   async create(
-    content: {
-      'application/json': {
-        schema: {
-          type: 'object',
-          required: ['productos_nombre', 'productos_precio', "productos_medida_id"],
-          properties: {
-            productos_id: {
-              type: 'number',
-            },
-            productos_numero_registro: {
-              type: 'string',
-            },
-            productos_nombre: {
-              type: 'string',
-            },
-            productos_precio: {
-              type: 'number',
-            },
-            productos_cantidad_referenciada: {
-              type: 'number',
-            },
-            productos_medida_id: {
-              type: 'number',
+    @requestBody({
+      content: {
+        'application/json': {
+          schema: {
+            type: 'object',
+            required: ['productos_nombre', 'productos_precio', "productos_medida_id"],
+            properties: {
+              productos_id: {
+                type: 'number',
+              },
+              productos_numero_registro: {
+                type: 'string',
+              },
+              productos_nombre: {
+                type: 'string',
+              },
+              productos_precio: {
+                type: 'number',
+              },
+              productos_cantidad_referenciada: {
+                type: 'number',
+              },
+              productos_medida_id: {
+                type: 'number',
+              },
+
             },
           },
         },
       },
-    },
+    })
     usuario: Omit<
       {
         productos_id?: number;
