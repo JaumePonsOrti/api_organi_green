@@ -217,7 +217,6 @@ export class VerPlanificacionCampoController {
         console.log("Lista Productos Dentro for parcelas:", listaProductosAImprimirEnTabla);
       }
 
-
       let objetoIDesplegableConfigPlanificacion: SuperDesplegableConfig = {
         headersDesplegable: cabeceraDesplegableCampo,
         componente_interno: {

@@ -54,6 +54,7 @@ export class Menus_por_rol {
       this.enlaces_menu_disponible[6],
       this.enlaces_menu_disponible[7],
       this.enlaces_menu_disponible[8],
+      this.enlaces_menu_disponible[16],
     ],
     "Sin_Loguear": [],
     "Trabajador_de_Campo": [
