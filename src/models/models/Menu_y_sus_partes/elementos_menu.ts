@@ -401,6 +401,12 @@ export class Elementos_menu {
       "parcela",
       "fas fa-tachometer-alt",
     ),
+    new Enlace_Menu(
+      "Producto Planificacion",
+      "crud",
+      "planificacion_producto",
+      "fas fa-tachometer-alt"
+    )
   ];
 
   /**
@@ -421,6 +427,7 @@ export class Elementos_menu {
   * 13: Permisos Rol
   * 14: Gestionar Permisos por ROL
   * 15: Gestionar Permisos por ROL APP
+  * 16: Producto Planificacion
   */
   public static getLista() {
     return this.lista_elementos;
