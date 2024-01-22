@@ -127,10 +127,14 @@ export class ResumenPlanificacionController {
     nombreCampo = "productos_planificados_id_planificacion";
     for (let i = 0; i < this.listaProductosPlanificados.length; i++) {
       let elemento = this.listaProductosPlanificados[i];
-      if (typeof this.objetoConProductosPlanificacadosOrdenadosPorPlanificacion[elemento[nombreCampo]] === "undefined") {
-        this.objetoConProductosPlanificacadosOrdenadosPorPlanificacion[elemento[nombreCampo]] = [];
+      //Comprobaremos si el producto planificado lo trae el cliente o no
+      if (elemento["productos_planificados_producto_dueño"] == 0) {
+        if (typeof this.objetoConProductosPlanificacadosOrdenadosPorPlanificacion[elemento[nombreCampo]] === "undefined") {
+          this.objetoConProductosPlanificacadosOrdenadosPorPlanificacion[elemento[nombreCampo]] = [];
+        }
+        this.objetoConProductosPlanificacadosOrdenadosPorPlanificacion[elemento[nombreCampo]].push(elemento);
       }
-      this.objetoConProductosPlanificacadosOrdenadosPorPlanificacion[elemento[nombreCampo]].push(elemento);
+
     }
 
     await this.acciones.create(new AccionesRealizadas({
@@ -153,8 +157,8 @@ export class ResumenPlanificacionController {
     */
     let objetoProductosPorDia: any = {};
     let listaIndiceFechas: string[] = [];
-    let listaIndiceProductosId: number[] = [];
     let objetoListaIndicesPorProductoYDia: any = {};
+
     for (let index = 0; index < this.listaPlanificaciones.length; index++) {
       const planificacion = this.listaPlanificaciones[index];
       console.log("Planificacion:", planificacion);
@@ -162,7 +166,6 @@ export class ResumenPlanificacionController {
       let fecha = new Date(planificacion["planificacion_fecha_realizar"]).toJSON();
       if (typeof this.objetoDosisPorProductoYDia[fecha] === "undefined") {
         this.objetoDosisPorProductoYDia[fecha] = [];
-        objetoTamanyoTotalPorDia[fecha] = 0;
         listaIndiceFechas.push(fecha);
         objetoProductosPorDia[fecha] = {};
         objetoListaIndicesPorProductoYDia[fecha] = [];
@@ -170,25 +173,42 @@ export class ResumenPlanificacionController {
 
       let listaParcelasCampo = this.objetoConParcelasOrdenadasPorCampo[planificacion["planificacion_id_campo"]] ?? [];
       console.log("Objeto:", this.objetoConParcelasOrdenadasPorCampo);
+
       //Calcular tamaño campo
       let tamnayo_campo = 0;
       for (var i = 0; i < listaParcelasCampo.length; i++) {
         let parcela = listaParcelasCampo[i];
         tamnayo_campo = tamnayo_campo + parcela.tamanyo_m2;
       }
-      objetoTamanyoTotalPorDia[fecha] =
-        objetoTamanyoTotalPorDia[fecha] + tamnayo_campo;
+
+
       let listaProductosPlanificadosI = this.objetoConProductosPlanificacadosOrdenadosPorPlanificacion[planificacion["planificacion_id"]] ?? [];
+
       //FOR PARA CREAR LOS OBJETOS DE PRODUCTOS a mostrar y facilitar el hacer calculos
       for (let index2 = 0; index2 < listaProductosPlanificadosI.length; index2++) {
         console.log("ENTRO EN FOR PRODUCTOS, index2:", index2);
+
         let productoPlan = listaProductosPlanificadosI[index2];
-        let producto = this.objetoConProductosPorId[productoPlan["productos_planificados_id_producto"]]
+        let producto = this.objetoConProductosPorId[productoPlan["productos_planificados_id_producto"]];
+        let dosis = producto["productos_cantidad_referenciada"];
+        let unidad_medida_en_metros_cuadrados = this.objetoConMedidasPorId[producto["productos_medida_id"]]["medida_metros_cuadrados"];
+        let dosis_por_producto_campo = tamnayo_campo * (dosis / unidad_medida_en_metros_cuadrados);
 
+        let productoId = producto["productos_id"];
+        if (typeof objetoProductosPorDia[fecha][productoId] === "undefined") {
 
-        if (typeof objetoProductosPorDia[fecha][producto["productos_id"]] === "undefined") {
-          objetoProductosPorDia[fecha][producto["productos_id"]] = producto;
+          let objeto = {
+            productos_id: productoId,
+            productos_nombre: producto["productos_nombre"],
+            dosis_por_producto_dia: dosis_por_producto_campo
+          };
+          objetoProductosPorDia[fecha][producto["productos_id"]] = objeto;
+
           objetoListaIndicesPorProductoYDia[fecha].push(producto["productos_id"]);
+
+        } else {
+          let dosis_por_producto_dia = objetoProductosPorDia[fecha][productoId]["dosis_por_producto_dia"] + dosis_por_producto_campo;
+          objetoProductosPorDia[fecha][productoId]["dosis_por_producto_dia"] = dosis_por_producto_dia;
         }
 
 
@@ -197,7 +217,8 @@ export class ResumenPlanificacionController {
 
     }
 
-    console.log("Lista Indices Fechas:", listaIndiceFechas)
+    console.log("Lista Indices Fechas:", listaIndiceFechas);
+
     //Bucle  para calcular la cantidad por producto y dia
     for (let index = 0; index < listaIndiceFechas.length; index++) {
       const fecha = listaIndiceFechas[index];
@@ -210,17 +231,8 @@ export class ResumenPlanificacionController {
           let productoId = objetoListaIndicesPorProductoYDia[fecha][index2];
           let producto = objetoProductosPorDia[fecha][productoId];
 
-          let dosis = producto["productos_cantidad_referenciada"];
-          let unidad_medida_en_metros_cuadrados = this.objetoConMedidasPorId[producto["productos_medida_id"]]["medida_metros_cuadrados"];
-          let dosis_por_producto_dia = objetoTamanyoTotalPorDia[fecha] * (dosis / unidad_medida_en_metros_cuadrados);
 
-          let objeto = {
-            productos_id: productoId,
-            productos_nombre: producto["productos_nombre"],
-            dosis_por_producto_dia: dosis_por_producto_dia
-          };
-
-          this.objetoDosisPorProductoYDia[fecha].push(objeto);
+          this.objetoDosisPorProductoYDia[fecha].push(producto);
         } catch (error) {
           console.log("500 error:", error);
         }
