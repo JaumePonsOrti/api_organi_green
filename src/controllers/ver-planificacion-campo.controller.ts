@@ -115,6 +115,7 @@ export class VerPlanificacionCampoController {
 
     this.listaMedidas = await this.medidaRepository.find();
     nombreCampo = "medida_id";
+
     for (let i = 0; i < this.listaMedidas.length; i++) {
       let elemento = this.listaMedidas[i];
       if (typeof this.objetoConMedidasPorId[elemento[nombreCampo]] === "undefined") {
@@ -140,7 +141,9 @@ export class VerPlanificacionCampoController {
       acciones_tabla_acción: "Parcelas",
       acciones_tipo: "ver/todos"
     }));
+
     let returnable: SuperDesplegableConfig[] = [];
+
     for (let index = 0; index < this.listaPlanificaciones.length; index++) {
       this.objetoDosisDeCadaCampoPorProducto = {};
       let objetoConfig!: SuperDesplegableConfig;
@@ -156,11 +159,13 @@ export class VerPlanificacionCampoController {
 
 
       let tamnayo_campo = 0;
+
       //Calcular tamaño campo
       for (var i = 0; i < listaParcelasCampo.length; i++) {
         let parcela = listaParcelasCampo[i];
         tamnayo_campo = tamnayo_campo + parcela.tamanyo_m2;
       }
+
       let cabeceraDesplegableCampo: ICabezeraDesplegableConfig[] = [
         {
           nombre_campo: "Nombre Cliente",
